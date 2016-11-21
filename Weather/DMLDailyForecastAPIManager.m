@@ -35,6 +35,11 @@
     return DMLOpenWeatherMapServiceV2_5;
 }
 
+- (Class)serviceClass
+{
+    return [DMLOpenWeatherMapService class];
+}
+
 - (CTAPIManagerRequestType)requestType
 {
     return CTAPIManagerRequestTypeGet;
@@ -48,7 +53,7 @@
 - (NSDictionary *)reformParams:(NSDictionary *)params
 {
     NSMutableDictionary *resultParams = params.mutableCopy;
-    resultParams[@"APPID"] = [[CTServiceFactory sharedInstance] serviceWithIdentifier:DMLOpenWeatherMapServiceV2_5].publicKey;
+    resultParams[@"APPID"] = [DMLOpenWeatherMapService new].publicKey;
     return resultParams;
 }
 

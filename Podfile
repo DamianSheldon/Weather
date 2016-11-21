@@ -1,4 +1,4 @@
-source 'ssh://git@192.168.1.243/git/Specs.git'
+#source 'ssh://git@192.168.1.243/git/Specs.git'
 source 'https://github.com/CocoaPods/Specs.git'
 # Uncomment this line to define a global platform for your project
 # platform :ios, '9.0'
@@ -8,7 +8,7 @@ target 'Weather' do
   # use_frameworks!
 
   # Pods for Weather
-  pod 'CTNetworking', '1.1.0P'
+  pod 'CTNetworking', :git => 'https://github.com/DamianSheldon/RTNetworking.git', :tag => '1.2.1P'
 
   target 'WeatherTests' do
     inherit! :search_paths

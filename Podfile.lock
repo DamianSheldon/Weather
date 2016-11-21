@@ -14,16 +14,26 @@ PODS:
   - AFNetworking/Serialization (3.1.0)
   - AFNetworking/UIKit (3.1.0):
     - AFNetworking/NSURLSession
-  - CTNetworking (1.1.0P):
+  - CTNetworking (1.2.1P):
     - AFNetworking
 
 DEPENDENCIES:
-  - CTNetworking (= 1.1.0P)
+  - CTNetworking (from `https://github.com/DamianSheldon/RTNetworking.git`, tag `1.2.1P`)
+
+EXTERNAL SOURCES:
+  CTNetworking:
+    :git: https://github.com/DamianSheldon/RTNetworking.git
+    :tag: 1.2.1P
+
+CHECKOUT OPTIONS:
+  CTNetworking:
+    :git: https://github.com/DamianSheldon/RTNetworking.git
+    :tag: 1.2.1P
 
 SPEC CHECKSUMS:
   AFNetworking: 5e0e199f73d8626b11e79750991f5d173d1f8b67
-  CTNetworking: c589818671b25852c528f67ccf1ddbce9843691f
+  CTNetworking: 4b2ca7de6b1a8dd7e63b0cf28a73ad13939b8ea6
 
-PODFILE CHECKSUM: 6944f5405226839845c8fa37792f8af66b676031
+PODFILE CHECKSUM: 7d576abf5ab5a6b96cc803c25987357a4443566a
 
 COCOAPODS: 1.0.1

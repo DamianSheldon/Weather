@@ -10,7 +10,6 @@
 
 #import "AppDelegate.h"
 #import "DMLWeatherViewController.h"
-#import "DMLOpenWeatherMapService.h"
 
 @interface AppDelegate ()
 
@@ -68,8 +67,6 @@
 
 - (void)setUpCTNetworking
 {
-    [[CTServiceFactory sharedInstance] registerService:[DMLOpenWeatherMapService class] withIdentifier:DMLOpenWeatherMapServiceV2_5];
-    
     [CTNetworkingConfiguration sharedNetworkConfiguration].cacheOutDateTimeSeconds = 600.0;// 10 minutes
 }
 
