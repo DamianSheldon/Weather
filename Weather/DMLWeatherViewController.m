@@ -43,11 +43,13 @@
  ---
  
     outlineView: | locationLabel(34) - weatherLabel(21) - temperatureLabel(112) - |
-
+ 
+    contentView: | outlineView(230) - hourWeatherView(96) - weekWeatherView(262) - todayWeatherDescribleLable(61) | = 649
  */
 
 static const CGFloat sOutlineViewHeight = 230.0;
-static const CGFloat sContentViewHeight = 450.0;
+static const CGFloat sContentViewHeight = 589.0;
+
 static const CGFloat sCollapseOutlineViewHeight = 55.0;
 
 static const CGFloat sDistanceAffectAlpha = 50.0;
@@ -60,8 +62,6 @@ static const CGFloat sMaxTopPaddingOfLocationLabel = 30.0;
 
 static const CGFloat sTodayViewHeight = 27.0;
 static const CGFloat sHourWeatherViewHeight = 96.0;
-
-static const CGFloat sInnerContentViewHeight = 652.0;
 
 static const CGFloat sItemWidth = 75.0;
 
@@ -110,9 +110,6 @@ static NSString *const sWeatherIconBaseURLString = @"http://openweathermap.org/i
 @property (nonatomic) UICollectionView *hourWeatherCollectionView;
 @property (nonatomic) DMLHairLineDecorateView *upperHairLineView;
 @property (nonatomic) DMLHairLineDecorateView *lowerHairLineView;
-
-@property (nonatomic) UIScrollView *innerScrollView;
-@property (nonatomic) UIView *innerContentView;
 
 @property (nonatomic) UITableView *tableView;
 
@@ -174,21 +171,13 @@ static NSString *const sWeatherIconBaseURLString = @"http://openweathermap.org/i
     [self.contentView addSubview:self.hourWeatherCollectionView];
     [self configureConstraintsForHourWeatherCollectionView];
     
-    [self.contentView addSubview:self.innerScrollView];
-    [self configureConstraintsForInnerScrollView];
-    
     // Configure hair line for hour weahter collection view
     [self.contentView addSubview:self.upperHairLineView];
     [self.contentView addSubview:self.lowerHairLineView];
     [self configureConstraintsForUpperHairLineView];
     [self configureConstraintsForLowerHairLineView];
-    
-    // View hierarchy of scroll view
-    [self.innerScrollView addSubview:self.innerContentView];
-    [self configureConstraintsForInnerContentView];
-    
-    // View hiearchy of inner content view
-    [self.innerContentView addSubview:self.tableView];
+
+    [self.contentView addSubview:self.tableView];
     [self configureConstraintsForTableView];
     
     // View hiearchy of today view
@@ -243,20 +232,12 @@ static NSString *const sWeatherIconBaseURLString = @"http://openweathermap.org/i
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    static CGFloat innerScrollViewOffsetY = DBL_MAX;
-    
 //    NSLog(@"%s\n", __PRETTY_FUNCTION__);
     
     CGFloat yOffset = scrollView.contentOffset.y;
-
+    
     if (scrollView == self.scrollView) {
         CGFloat yIntentset = sOutlineViewHeight - sCollapseOutlineViewHeight;
-        
-        // En-Disable inner scroll view
-        if (yOffset > 0 && !self.innerScrollView.scrollEnabled) {
-            self.scrollView.scrollEnabled = NO;
-            self.innerScrollView.scrollEnabled = YES;
-        }
         
         if (yOffset > sDistanceAffectAlpha - yIntentset) {
             self.temperatureLabel.alpha = 0.0;
@@ -287,25 +268,6 @@ static NSString *const sWeatherIconBaseURLString = @"http://openweathermap.org/i
         
         [self.outlineView setNeedsUpdateConstraints];
     }
-    else if (scrollView == self.innerScrollView) {
-//        NSLog(@"canCancelContentTouches:%@", scrollView.canCancelContentTouches ? @"YES" : @"NO");
-
-        if (fabs(innerScrollViewOffsetY - DBL_MAX) < DBL_EPSILON) {
-            innerScrollViewOffsetY = yOffset;
-        }
-        else {
-            BOOL scrollDown = yOffset < innerScrollViewOffsetY;
-            if (scrollDown && yOffset < 0) {
-                self.innerScrollView.scrollEnabled = NO;
-                self.scrollView.scrollEnabled = YES;
-                
-                innerScrollViewOffsetY = DBL_MAX;
-            }
-            else {
-                innerScrollViewOffsetY = yOffset;
-            }
-        }
-    }
 }
 
 //- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
@@ -316,8 +278,49 @@ static NSString *const sWeatherIconBaseURLString = @"http://openweathermap.org/i
 //- (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset
 //{
 //    NSLog(@"%s\n", __PRETTY_FUNCTION__);
-//}
+//    if (scrollView == self.tableView) {
+//        CGPoint offset = *(targetContentOffset);
+//        if (offset.y < self.currentTableViewContentOffset.y) {
+//            self.tableViewScrollUp = YES;
+//        }
 //
+//        NSLog(@"targetContentOffset: %@: tableViewScrollUp : %@\n", NSStringFromCGPoint(*targetContentOffset), self.tableViewScrollUp ? @"Up" : @"Down");
+//
+//
+//        if (self.tableViewScrollUp) {
+//            NSLog(@"self.scrollView.contentOffset.y: %.2f\n", self.scrollView.contentOffset.y);
+//            if (self.scrollView.contentOffset.y < -28) {
+//                // Scroll view doesn't scroll to top, so first scroll it up
+//                CGFloat delta = offset.y - scrollView.contentOffset.y;
+//                CGPoint p = self.scrollView.contentOffset;
+//                p.y += delta;
+//
+//                self.scrollView.contentOffset = p;
+//
+//                // Keep table stay at still
+//                *(targetContentOffset) = scrollView.contentOffset;
+//            }
+//        }
+//        else {
+//            if (!self.tableViewScrollUp) {
+//                NSLog(@"self.tableView.contentOffset.y: %.2f\n", self.tableView.contentOffset.y);
+//                if (self.tableView.contentOffset.y < 0) {
+//                    // Table view alread scroll to top, then hand off scroll to scroll view
+//                    CGFloat delta = scrollView.contentOffset.y - offset.y;
+//                    CGPoint p = self.scrollView.contentOffset;
+//                    p.y -= delta;
+//
+//                    self.scrollView.contentOffset = p;
+//
+//                    *(targetContentOffset) = scrollView.contentOffset;
+//                }
+//            }
+//        }
+//
+//        self.currentTableViewContentOffset = scrollView.contentOffset;
+//    }
+//}
+
 //- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 //{
 //    NSLog(@"%s\n", __PRETTY_FUNCTION__);
@@ -691,33 +694,12 @@ static NSString *const sWeatherIconBaseURLString = @"http://openweathermap.org/i
     [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.hourWeatherCollectionView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:sHourWeatherViewHeight]];
 }
 
-- (void)configureConstraintsForInnerScrollView
-{
-    [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.innerScrollView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:0]];
-    [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.innerScrollView attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeRight multiplier:1.0 constant:0]];
-    [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.innerScrollView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.hourWeatherCollectionView attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0]];
-    [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.innerScrollView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0]];
-}
-
-- (void)configureConstraintsForInnerContentView
-{
-    CGRect fullScreenRect = [[UIScreen mainScreen] applicationFrame];
-    
-    [self.innerScrollView addConstraint:[NSLayoutConstraint constraintWithItem:self.innerContentView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.innerScrollView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:0]];
-    [self.innerScrollView addConstraint:[NSLayoutConstraint constraintWithItem:self.innerContentView attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.innerScrollView attribute:NSLayoutAttributeRight multiplier:1.0 constant:0]];
-    [self.innerScrollView addConstraint:[NSLayoutConstraint constraintWithItem:self.innerContentView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.innerScrollView attribute:NSLayoutAttributeTop multiplier:1.0 constant:0]];
-    [self.innerScrollView addConstraint:[NSLayoutConstraint constraintWithItem:self.innerContentView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.innerScrollView attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0]];
-    
-    [self.innerScrollView addConstraint:[NSLayoutConstraint constraintWithItem:self.innerContentView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:CGRectGetWidth(fullScreenRect)]];
-    [self.innerScrollView addConstraint:[NSLayoutConstraint constraintWithItem:self.innerContentView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:sInnerContentViewHeight]];
-}
-
 - (void)configureConstraintsForTableView
 {
-    [self.innerContentView addConstraint:[NSLayoutConstraint constraintWithItem:self.tableView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.innerContentView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:0]];
-    [self.innerContentView addConstraint:[NSLayoutConstraint constraintWithItem:self.tableView attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.innerContentView attribute:NSLayoutAttributeRight multiplier:1.0 constant:0]];
-    [self.innerContentView addConstraint:[NSLayoutConstraint constraintWithItem:self.tableView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.innerContentView attribute:NSLayoutAttributeTop multiplier:1.0 constant:0]];
-    [self.innerContentView addConstraint:[NSLayoutConstraint constraintWithItem:self.tableView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.innerContentView attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0]];
+    [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.tableView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:0]];
+    [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.tableView attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeRight multiplier:1.0 constant:0]];
+    [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.tableView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.hourWeatherCollectionView attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0]];
+    [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.tableView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0]];
 }
 
 - (void)configureConstraintsForDayLabel
@@ -867,33 +849,11 @@ static NSString *const sWeatherIconBaseURLString = @"http://openweathermap.org/i
     return _hourWeatherCollectionView;
 }
 
-- (UIScrollView *)innerScrollView
-{
-    if (!_innerScrollView) {
-        _innerScrollView = [[UIScrollView alloc] initWithFrame:CGRectZero];
-        [_innerScrollView setTranslatesAutoresizingMaskIntoConstraints:NO];
-        _innerScrollView.scrollEnabled = NO;
-        _innerScrollView.showsVerticalScrollIndicator = NO;
-        _innerScrollView.delegate = self;
-    }
-    return _innerScrollView;
-}
-
-- (UIView *)innerContentView
-{
-    if (!_innerContentView) {
-        _innerContentView = [[UIView alloc] initWithFrame:CGRectZero];
-        [_innerContentView setTranslatesAutoresizingMaskIntoConstraints:NO];
-    }
-    return _innerContentView;
-}
-
 - (UITableView *)tableView
 {
     if (!_tableView) {
         _tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
         [_tableView setTranslatesAutoresizingMaskIntoConstraints:NO];
-        _tableView.scrollEnabled = NO;
         _tableView.tableFooterView = [UIView new];
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         _tableView.backgroundColor = [UIColor clearColor];
