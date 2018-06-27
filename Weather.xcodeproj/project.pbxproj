@@ -115,6 +115,69 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		58147DB820E3662400B5E4EE /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				5835E8D21DBF01F400A68F63 /* UIColor+DMLAdditions.h */,
+				5835E8D31DBF01F400A68F63 /* UIColor+DMLAdditions.m */,
+				589D21691DC73D1800CA0905 /* UIImage+DMLAdditions.h */,
+				589D216A1DC73D1800CA0905 /* UIImage+DMLAdditions.m */,
+				588032C91DD179D8003AFF96 /* NSUserDefaults+DMLAppSpecific.h */,
+				588032CA1DD179D8003AFF96 /* NSUserDefaults+DMLAppSpecific.m */,
+				588032CC1DD181E0003AFF96 /* NSTimer+EOCBlocksSupport.h */,
+				588032CD1DD181E0003AFF96 /* NSTimer+EOCBlocksSupport.m */,
+			);
+			name = Categories;
+			sourceTree = "<group>";
+		};
+		58147DB920E3664700B5E4EE /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				588032C31DD05A6E003AFF96 /* DMLOpenWeatherMapService.h */,
+				588032C41DD05A6E003AFF96 /* DMLOpenWeatherMapService.m */,
+				588032C61DD05B79003AFF96 /* DMLCurrentWeatherAPIManager.h */,
+				588032C71DD05B79003AFF96 /* DMLCurrentWeatherAPIManager.m */,
+				58B789421DDC0D1F007765BB /* DMLDailyForecastAPIManager.h */,
+				58B789431DDC0D1F007765BB /* DMLDailyForecastAPIManager.m */,
+				5821B3361DDEE27C0025BC24 /* DMLPerThreeHourForecastAPIManager.h */,
+				5821B3371DDEE27C0025BC24 /* DMLPerThreeHourForecastAPIManager.m */,
+			);
+			name = Network;
+			sourceTree = "<group>";
+		};
+		58147DBA20E3665700B5E4EE /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				589D21601DC1DF3000CA0905 /* DMLWeatherCollectionCell.h */,
+				589D21611DC1DF3000CA0905 /* DMLWeatherCollectionCell.m */,
+				589D21631DC1EF1E00CA0905 /* DMLWeatherTableCell.h */,
+				589D21641DC1EF1E00CA0905 /* DMLWeatherTableCell.m */,
+				589D21661DC1FB8900CA0905 /* DMLSubtitleTableCell.h */,
+				589D21671DC1FB8900CA0905 /* DMLSubtitleTableCell.m */,
+				589D216C1DC741FD00CA0905 /* DMLHairLineDecorateView.h */,
+				589D216D1DC741FD00CA0905 /* DMLHairLineDecorateView.m */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
+		58147DBB20E3666100B5E4EE /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				5835E8B31DBEE8F100A68F63 /* DMLWeatherViewController.h */,
+				5835E8B41DBEE8F100A68F63 /* DMLWeatherViewController.m */,
+			);
+			name = Controller;
+			sourceTree = "<group>";
+		};
+		58147DBC20E3666B00B5E4EE /* AppDelegate */ = {
+			isa = PBXGroup;
+			children = (
+				5835E8B01DBEE8F000A68F63 /* AppDelegate.h */,
+				5835E8B11DBEE8F000A68F63 /* AppDelegate.m */,
+			);
+			name = AppDelegate;
+			sourceTree = "<group>";
+		};
 		5835E8A11DBEE8EE00A68F63 = {
 			isa = PBXGroup;
 			children = (
@@ -138,34 +201,11 @@
 		5835E8AC1DBEE8F000A68F63 /* Weather */ = {
 			isa = PBXGroup;
 			children = (
-				5835E8B01DBEE8F000A68F63 /* AppDelegate.h */,
-				5835E8B11DBEE8F000A68F63 /* AppDelegate.m */,
-				5835E8B31DBEE8F100A68F63 /* DMLWeatherViewController.h */,
-				5835E8B41DBEE8F100A68F63 /* DMLWeatherViewController.m */,
-				589D21601DC1DF3000CA0905 /* DMLWeatherCollectionCell.h */,
-				589D21611DC1DF3000CA0905 /* DMLWeatherCollectionCell.m */,
-				589D21631DC1EF1E00CA0905 /* DMLWeatherTableCell.h */,
-				589D21641DC1EF1E00CA0905 /* DMLWeatherTableCell.m */,
-				589D21661DC1FB8900CA0905 /* DMLSubtitleTableCell.h */,
-				589D21671DC1FB8900CA0905 /* DMLSubtitleTableCell.m */,
-				589D216C1DC741FD00CA0905 /* DMLHairLineDecorateView.h */,
-				589D216D1DC741FD00CA0905 /* DMLHairLineDecorateView.m */,
-				5835E8D21DBF01F400A68F63 /* UIColor+DMLAdditions.h */,
-				5835E8D31DBF01F400A68F63 /* UIColor+DMLAdditions.m */,
-				589D21691DC73D1800CA0905 /* UIImage+DMLAdditions.h */,
-				589D216A1DC73D1800CA0905 /* UIImage+DMLAdditions.m */,
-				588032C31DD05A6E003AFF96 /* DMLOpenWeatherMapService.h */,
-				588032C41DD05A6E003AFF96 /* DMLOpenWeatherMapService.m */,
-				588032C61DD05B79003AFF96 /* DMLCurrentWeatherAPIManager.h */,
-				588032C71DD05B79003AFF96 /* DMLCurrentWeatherAPIManager.m */,
-				58B789421DDC0D1F007765BB /* DMLDailyForecastAPIManager.h */,
-				58B789431DDC0D1F007765BB /* DMLDailyForecastAPIManager.m */,
-				5821B3361DDEE27C0025BC24 /* DMLPerThreeHourForecastAPIManager.h */,
-				5821B3371DDEE27C0025BC24 /* DMLPerThreeHourForecastAPIManager.m */,
-				588032C91DD179D8003AFF96 /* NSUserDefaults+DMLAppSpecific.h */,
-				588032CA1DD179D8003AFF96 /* NSUserDefaults+DMLAppSpecific.m */,
-				588032CC1DD181E0003AFF96 /* NSTimer+EOCBlocksSupport.h */,
-				588032CD1DD181E0003AFF96 /* NSTimer+EOCBlocksSupport.m */,
+				58147DBC20E3666B00B5E4EE /* AppDelegate */,
+				58147DBB20E3666100B5E4EE /* Controller */,
+				58147DBA20E3665700B5E4EE /* Views */,
+				58147DB820E3662400B5E4EE /* Categories */,
+				58147DB920E3664700B5E4EE /* Network */,
 				5835E8B91DBEE8F100A68F63 /* Assets.xcassets */,
 				5835E8BB1DBEE8F100A68F63 /* LaunchScreen.storyboard */,
 				5835E8BE1DBEE8F100A68F63 /* Info.plist */,
