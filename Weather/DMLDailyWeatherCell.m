@@ -7,6 +7,7 @@
 //
 
 #import "DMLDailyWeatherCell.h"
+#import "DMLCollectionViewHandOffLayoutAttributes.h"
 
 static const CGFloat sPadding = 20.0;
 
@@ -65,6 +66,17 @@ static const CGFloat sPadding = 20.0;
     self.weatherImageView.image = nil;
     self.maxTemperatureLabel.text = nil;
     self.minTemperatureLabel.text = nil;
+}
+
+- (void)applyLayoutAttributes:(UICollectionViewLayoutAttributes *)layoutAttributes
+{
+    [super applyLayoutAttributes:layoutAttributes];
+    
+    DMLCollectionViewHandOffLayoutAttributes *attributes = (DMLCollectionViewHandOffLayoutAttributes *)layoutAttributes;
+    self.dayLabel.alpha = attributes.overlayAlpha;
+    self.weatherImageView.alpha = attributes.overlayAlpha;
+    self.maxTemperatureLabel.alpha = attributes.overlayAlpha;
+    self.minTemperatureLabel.alpha = attributes.overlayAlpha;
 }
 
 #pragma mark - Private Methods

@@ -11,6 +11,6 @@
 @interface DMLCollectionViewHandOffLayoutAttributes : UICollectionViewLayoutAttributes
 
 @property (nonatomic) CGPoint initialOrigin;
-@property (nonatomic) CGFloat headerOverlayAlpha;
+@property (nonatomic) CGFloat overlayAlpha;
 
 @end

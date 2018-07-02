@@ -68,7 +68,7 @@
     
     DMLCollectionViewHandOffLayoutAttributes *attributes = (DMLCollectionViewHandOffLayoutAttributes *)layoutAttributes;
     
-    self.temperatureLabel.alpha = attributes.headerOverlayAlpha;
+    self.temperatureLabel.alpha = attributes.overlayAlpha;
 }
 
 //- (void)prepareForReuse

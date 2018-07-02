@@ -37,7 +37,7 @@
 - (void)commonInit
 {
     self.initialOrigin = CGPointZero;
-    self.headerOverlayAlpha = 0;
+    self.overlayAlpha = 0;
 }
 
 #pragma mark - Override
@@ -46,7 +46,7 @@
 {
     DMLCollectionViewHandOffLayoutAttributes *copy = [super copyWithZone:zone];
     copy.initialOrigin = self.initialOrigin;
-    copy.headerOverlayAlpha = self.headerOverlayAlpha;
+    copy.overlayAlpha = self.overlayAlpha;
     
     return copy;
 }
@@ -59,7 +59,7 @@
         return NO;
     }
     
-    if (self.headerOverlayAlpha != other.headerOverlayAlpha) {
+    if (self.overlayAlpha != other.overlayAlpha) {
         return NO;
     }
     

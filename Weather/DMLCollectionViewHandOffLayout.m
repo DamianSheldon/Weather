@@ -95,6 +95,22 @@ static NSString * const sElementCellKey = @"Cell";
     
     [self prepareElementWithKey:sElementMenuKey size:self.menuSize attributes:menuAttributes];
     
+    // Adjust height of header according content offset
+    CGFloat yOffset = self.collectionView.contentOffset.y;
+    CGFloat hMax = self.headerSize.height - self.minHeaderHeight;
+    
+    if (yOffset >= self.menuSize.height) {
+        CGRect frame = headerAttributes.frame;
+        
+        if (yOffset <= hMax) {
+            frame.size.height -= yOffset - self.menuSize.height;
+        }
+        else {
+            frame.size.height = self.minHeaderHeight;
+        }
+        headerAttributes.frame = frame;
+    }
+    
     // Cell
     id<UICollectionViewDataSource> dataSource = self.collectionView.dataSource;
     
@@ -112,27 +128,21 @@ static NSString * const sElementCellKey = @"Cell";
             attributes.frame = CGRectMake(0, self.contentHeight, cellSize.width, cellSize.height);
             attributes.zIndex = self.zIndex;
             
+            // Set alpha according to contentOffset
+            if (!i) {
+                if (yOffset > hMax + 0.3 * cellSize.height + j * cellSize.height) {
+                    attributes.overlayAlpha = 0;
+                }
+                else {
+                    attributes.overlayAlpha = 1.0;
+                }
+            }
+            
             self.cache[sElementCellKey][cellIndexPath] = attributes;
             
             self.contentHeight = CGRectGetMaxY(attributes.frame);
             self.zIndex += 1;
         }
-    }
-    
-    // Adjust height of header according content offset
-    CGFloat yOffset = self.collectionView.contentOffset.y;
-    CGFloat hMax = self.headerSize.height - self.minHeaderHeight;
-    
-    if (yOffset >= self.menuSize.height) {
-        CGRect frame = headerAttributes.frame;
-
-        if (yOffset <= hMax) {
-            frame.size.height -= yOffset - self.menuSize.height;
-        }
-        else {
-            frame.size.height = self.minHeaderHeight;
-        }
-        headerAttributes.frame = frame;
     }
     
     // Update header zIndex
@@ -231,7 +241,7 @@ static NSString * const sElementCellKey = @"Cell";
         CGFloat distanceAffectAlpha = MIN(self.minHeaderHeight, ty);
         CGFloat alpha = self.headerOverlayMaxAlphaValue - distanceAffectAlpha/self.minHeaderHeight;
         
-        attributes.headerOverlayAlpha = alpha;
+        attributes.overlayAlpha = alpha;
     }
     
     if ([key isEqualToString:sElementMenuKey]) {
