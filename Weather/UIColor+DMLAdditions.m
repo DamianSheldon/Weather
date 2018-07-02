@@ -15,9 +15,9 @@
     return [UIColor colorWithRed:0.45 green:0.54 blue:0.60 alpha:1.0];
 }
 
-+ (UIColor *)dml_bostonBlue
++ (UIColor *)dml_skyBlue
 {
-    return [UIColor colorWithRed:0.26 green:0.57 blue:0.75 alpha:1.00];
+    return [UIColor colorWithRed:126.0/255.0 green:192.0/255.0 blue:238.0/255.0 alpha:1.00];
 }
 
 @end

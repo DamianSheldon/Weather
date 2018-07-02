@@ -12,6 +12,6 @@
 
 + (UIColor *)dml_lightSlateGray;
 
-+ (UIColor *)dml_bostonBlue;
++ (UIColor *)dml_skyBlue;
 
 @end

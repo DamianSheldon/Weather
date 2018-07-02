@@ -116,7 +116,7 @@ static NSString *const sWeatherIconBaseURLString = @"http://openweathermap.org/i
 {
     [super viewDidLoad];
     
-    self.view.backgroundColor = [UIColor dml_bostonBlue];
+    self.view.backgroundColor = [UIColor dml_skyBlue];
     
     [self.collectionView registerClass:DMLHeader.class forSupplementaryViewOfKind:[DMLCollectionViewHandOffLayout kindOfElement:DMLHandOffLayoutElementHeader] withReuseIdentifier:sWeatherHeaderReuseIdentifier];
     [self.collectionView registerClass:DMLMenu.class forSupplementaryViewOfKind:[DMLCollectionViewHandOffLayout kindOfElement:DMLHandOffLayoutElementMenu] withReuseIdentifier:sWeatherMenuReuseIdentifier];
