@@ -35,6 +35,8 @@ static const CGFloat sStandarPadding = 20.0;
 @property (nonatomic) UIView *topHairLineView;
 @property (nonatomic) UIView *bottomHairLineView;
 
+@property (nonatomic, copy) NSArray *listOfHourWeather;
+
 @end
 
 @implementation DMLMenu
@@ -166,6 +168,19 @@ static const CGFloat sStandarPadding = 20.0;
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     return CGSizeMake(sItemWidth, sHourWeatherViewHeight);
+}
+
+- (void)configureTemperatureWithDict:(NSDictionary *)dict
+{
+    NSDictionary *main = dict[@"main"];
+    self.maxTemperatureLabel.text = [NSString stringWithFormat:@"%@", main[@"temp_max"]];
+    self.minTemperatureLabel.text = [NSString stringWithFormat:@"%@", main[@"temp_min"]];
+}
+
+- (void)updateWithNewDataSource:(NSArray *)newData
+{
+    self.listOfHourWeather = newData;
+    [self.hourlyWeatherCollectionView reloadData];
 }
 
 @end

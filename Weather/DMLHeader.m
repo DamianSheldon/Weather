@@ -71,10 +71,24 @@
     self.temperatureLabel.alpha = attributes.headerOverlayAlpha;
 }
 
-- (void)prepareForReuse
+//- (void)prepareForReuse
+//{
+//    [super prepareForReuse];
+//
+//}
+
+- (void)configureWithDict:(NSDictionary *)dict
 {
-    [super prepareForReuse];
+    NSArray *weathers = dict[@"weather"];
+    if (weathers.count > 0) {
+        NSDictionary *weather = weathers.firstObject;
+        self.weatherLabel.text = weather[@"main"];
+    }
     
+    self.locationLabel.text = dict[@"name"];
+
+    NSDictionary *main = dict[@"main"];
+    self.temperatureLabel.text = [NSString stringWithFormat:@"%@", main[@"temp"]];
 }
 
 @end

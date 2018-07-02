@@ -96,6 +96,8 @@ static NSString *const sPrecipitationKey = @"Precipitation";
 static NSString *const sPressureKey = @"Pressure";
 static NSString *const sVisibilityKey = @"Visibility";
 static NSString *const sUVIndexKey = @"UV Index";
+static NSString *const sAQIKey = @"AQI";
+static NSString *const sAirQualityKey = @"Air Quality";
 
 static NSString *const sWeatherHeaderReuseIdentifier = @"WeatherHeader";
 static NSString *const sWeatherMenuReuseIdentifier = @"WeatherMenu";
@@ -139,7 +141,7 @@ static NSString *const sWeatherIconBaseURLString = @"http://openweathermap.org/i
 
 @property (nonatomic) NSTimer *weatherUpdateTimer;
 
-//@property (nonatomic) NSDateFormatter *dateFormatter;
+@property (nonatomic) NSDateFormatter *dateFormatter;
 //@property (nonatomic) NSDateFormatter *hourDateFormatter;
 @property (nonatomic) NSDateFormatter *hhmmDateFormatter;
 
@@ -147,6 +149,8 @@ static NSString *const sWeatherIconBaseURLString = @"http://openweathermap.org/i
 @property (nonatomic, copy) NSArray *listOfHourWeather;
 @property (nonatomic, copy) NSMutableDictionary *weatherConditions;
 @property (nonatomic, copy) NSArray *weatherConditionKeyPairs;
+
+@property (nonatomic) NSDictionary *currentWeatherDict;
 
 @end
 
@@ -225,35 +229,35 @@ static NSString *const sWeatherIconBaseURLString = @"http://openweathermap.org/i
 {
     [super viewWillAppear:animated];
     
-//    CLAuthorizationStatus authorizationStatus = [CLLocationManager authorizationStatus];
-//
-//    if (authorizationStatus != kCLAuthorizationStatusRestricted && authorizationStatus != kCLAuthorizationStatusDenied) {
-//        self.locationManager.delegate = self;
-//
-//        if (authorizationStatus == kCLAuthorizationStatusNotDetermined) {
-//            [self.locationManager requestAlwaysAuthorization];
-//        }
-//        else {
-//            if ([CLLocationManager locationServicesEnabled]) {
-//                [self.locationManager startUpdatingLocation];
-//            }
-//        }
-//    }
+    CLAuthorizationStatus authorizationStatus = [CLLocationManager authorizationStatus];
+
+    if (authorizationStatus != kCLAuthorizationStatusRestricted && authorizationStatus != kCLAuthorizationStatusDenied) {
+        self.locationManager.delegate = self;
+
+        if (authorizationStatus == kCLAuthorizationStatusNotDetermined) {
+            [self.locationManager requestAlwaysAuthorization];
+        }
+        else {
+            if ([CLLocationManager locationServicesEnabled]) {
+                [self.locationManager startUpdatingLocation];
+            }
+        }
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
     
-//    [self.locationManager stopUpdatingLocation];
-//
-//    self.locationManager.delegate = nil;
-//
-//    if ([self.weatherUpdateTimer isValid]) {
-//        [self.weatherUpdateTimer invalidate];
-//    }
-//
-//    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+    [self.locationManager stopUpdatingLocation];
+
+    self.locationManager.delegate = nil;
+
+    if ([self.weatherUpdateTimer isValid]) {
+        [self.weatherUpdateTimer invalidate];
+    }
+
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
 }
 
 #pragma mark - UIScrollViewDelegate
@@ -445,9 +449,31 @@ static NSInteger const sWeatherDetailInfoEntries = 6;
         case 0: {
             DMLDailyWeatherCell *dailyWeatherCell = [collectionView dequeueReusableCellWithReuseIdentifier:sDailyWeatherCellIdentifier forIndexPath:indexPath];
             
-            dailyWeatherCell.dayLabel.text = @"星期五";
-            dailyWeatherCell.maxTemperatureLabel.text = @"34";
-            dailyWeatherCell.minTemperatureLabel.text = @"27";
+            NSDate *date = [[NSCalendar currentCalendar] dateByAddingUnit:NSCalendarUnitDay value:indexPath.row + 1 toDate:[NSDate date] options:0];
+            
+            dailyWeatherCell.dayLabel.text = [self.dateFormatter stringFromDate:date];
+    
+            if (indexPath.row < self.listOfForecastWeather.count) {
+                NSDictionary *forecastWeather = self.listOfForecastWeather[indexPath.row];
+    
+                NSDictionary *temp = forecastWeather[@"temp"];
+    
+                dailyWeatherCell.maxTemperatureLabel.text = [NSString stringWithFormat:@"%@", temp[@"max"]];
+                dailyWeatherCell.minTemperatureLabel.text = [NSString stringWithFormat:@"%@", temp[@"min"]];
+    
+                NSArray *weathers = forecastWeather[@"weather"];
+                if (weathers.count > 0) {
+                    NSDictionary *weather = weathers.firstObject;
+    
+                    NSString *weatherIconString = [NSString stringWithFormat:@"%@%@.png", sWeatherIconBaseURLString, weather[@"icon"]];
+    
+                    [dailyWeatherCell.weatherImageView setImageWithURL:[NSURL URLWithString:weatherIconString]];
+                }
+            }
+            else {
+                dailyWeatherCell.maxTemperatureLabel.text = @"-";
+                dailyWeatherCell.minTemperatureLabel.text = @"-";
+            }
             
             cell = dailyWeatherCell;
             break;
@@ -463,11 +489,18 @@ static NSInteger const sWeatherDetailInfoEntries = 6;
         case 2: {
             DMLDetailWeatherCell *detailWeatherCell = [collectionView dequeueReusableCellWithReuseIdentifier:sDetailWeatherCellIdentifier forIndexPath:indexPath];
             
-            detailWeatherCell.leftTitleLabel.text = @"日出";
-            detailWeatherCell.leftValueLabel.text = @"05:33";
+            NSUInteger keyIndex = indexPath.row * 2;
             
-            detailWeatherCell.rightTitleLabel.text = @"日落";
-            detailWeatherCell.rightValueLabel.text = @"19:28";
+            if (keyIndex + 2 <= self.weatherConditionKeyPairs.count) {
+                NSString *key = self.weatherConditionKeyPairs[keyIndex];
+                NSString *subKey = self.weatherConditionKeyPairs[keyIndex + 1];
+                
+                detailWeatherCell.leftTitleLabel.text = key;
+                detailWeatherCell.leftValueLabel.text = self.weatherConditions[key];
+                
+                detailWeatherCell.rightTitleLabel.text = subKey;
+                detailWeatherCell.rightValueLabel.text = self.weatherConditions[subKey];
+            }
             
             if (indexPath.row + 1 == sWeatherDetailInfoEntries) {
                 detailWeatherCell.separatorLineView.hidden = YES;
@@ -488,13 +521,19 @@ static NSInteger const sWeatherDetailInfoEntries = 6;
 {
     if ([kind isEqualToString:[DMLCollectionViewHandOffLayout kindOfElement:DMLHandOffLayoutElementHeader]]) {
         DMLHeader *header = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:sWeatherHeaderReuseIdentifier forIndexPath:indexPath];
-        
+        if (self.currentWeatherDict) {
+            [header configureWithDict:self.currentWeatherDict];
+        }
+        NSLog(@"header:%p\n", header);
         return header;
     }
     
     if ([kind isEqualToString:[DMLCollectionViewHandOffLayout kindOfElement:DMLHandOffLayoutElementMenu]]) {
         DMLMenu *menu = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:sWeatherMenuReuseIdentifier forIndexPath:indexPath];
-        
+        if (self.currentWeatherDict) {
+            [menu configureTemperatureWithDict:self.currentWeatherDict];
+        }
+        NSLog(@"menu:%p\n", menu);
         return menu;
     }
     
@@ -663,7 +702,9 @@ static CGFloat const sWeatherDetailInfoCellHeight = 52.0;
         [[NSUserDefaults standardUserDefaults] setLastWeatherUpdateTime:[NSDate date]];
         
         NSDictionary *responseDictionary = [manager fetchDataWithReformer:nil];
-//        NSLog(@"responseDictionary:%@", responseDictionary);
+        self.currentWeatherDict = responseDictionary;
+
+        [self.collectionView reloadSections:[NSIndexSet indexSetWithIndex:0]];
         
         NSArray *weathers = responseDictionary[@"weather"];
         if (weathers.count > 0) {
@@ -675,29 +716,44 @@ static CGFloat const sWeatherDetailInfoCellHeight = 52.0;
         
 //        self.locationLabel.text = responseDictionary[@"name"];
 //
-//        NSDictionary *main = responseDictionary[@"main"];
+        NSDictionary *main = responseDictionary[@"main"];
 //
 //        self.temperatureLabel.text = [NSString stringWithFormat:@"%@ᵒ", main[@"temp"]];
 //
 //        self.maxTemperatureLabel.text = [NSString stringWithFormat:@"%@", main[@"temp_max"]];
 //        self.minTemperatureLabel.text = [NSString stringWithFormat:@"%@", main[@"temp_min"]];
         
-//        self.weatherConditions[sPressureKey] = [NSString stringWithFormat:@"%@ hPa", main[@"pressure"]];
-//        self.weatherConditions[sHumidityKey] = [NSString stringWithFormat:@"%@ %%", main[@"humidity"]];
+        self.weatherConditions[sPressureKey] = [NSString stringWithFormat:@"%@ hPa", main[@"pressure"]];
+        self.weatherConditions[sHumidityKey] = [NSString stringWithFormat:@"%@ %%", main[@"humidity"]];
         
         NSDictionary *sys = responseDictionary[@"sys"];
-        
-        NSDate *sunrise = [[NSDate alloc] initWithTimeIntervalSince1970:[(NSNumber *)sys[@"sunrise"] doubleValue]];
-        NSDate *sunset = [[NSDate alloc] initWithTimeIntervalSince1970:[(NSNumber *)sys[@"sunset"] doubleValue]];
-        
-        self.weatherConditions[sSunriseKey] = [self.hhmmDateFormatter stringFromDate:sunrise];
-        self.weatherConditions[sSunsetKey] = [self.hhmmDateFormatter stringFromDate:sunset];
+        if (sys) {
+            NSNumber *sunriseNumber = (NSNumber *)sys[@"sunrise"];
+            if (sunriseNumber) {
+                NSDate *sunriseDate = [[NSDate alloc] initWithTimeIntervalSince1970:[sunriseNumber doubleValue]];
+                NSString *sunriseStr = [self.hhmmDateFormatter stringFromDate:sunriseDate];
+                if (sunriseStr) {
+                    self.weatherConditions[sSunriseKey] = sunriseStr;
+                }
+            }
+            
+            NSNumber *sunsetNumber = (NSNumber *)sys[@"sunset"];
+            if (sunsetNumber) {
+                NSDate *sunsetDate = [[NSDate alloc] initWithTimeIntervalSince1970:[sunsetNumber doubleValue]];
+                if (sunsetDate) {
+                    NSString *sunsetStr = [self.hhmmDateFormatter stringFromDate:sunsetDate];
+                    if (sunsetStr) {
+                        self.weatherConditions[sSunsetKey] = sunsetStr;
+                    }
+                }
+            }
+        }
         
         NSDictionary *wind = responseDictionary[@"wind"];
         
         self.weatherConditions[sWindKey] = [NSString stringWithFormat:@"%@ %@m/s", wind[@"deg"], wind[@"speed"]];
         
-//        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
+        [self.collectionView reloadSections:[NSIndexSet indexSetWithIndex:2]];
     }
     else if (manager == self.dailyForecastAPIManager) {
         NSDictionary *responseDictionary = [manager fetchDataWithReformer:nil];
@@ -706,7 +762,7 @@ static CGFloat const sWeatherDetailInfoCellHeight = 52.0;
         if ([listOfForecastWeather isKindOfClass:[NSArray class]]) {
             self.listOfForecastWeather = listOfForecastWeather;
             
-//            [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
+            [self.collectionView reloadSections:[NSIndexSet indexSetWithIndex:0]];
         }
     }
     else if (manager == self.perThreeHourForecastAPIManager) {
@@ -714,6 +770,9 @@ static CGFloat const sWeatherDetailInfoCellHeight = 52.0;
         NSArray *listOfHourWeather = responseDictionary[@"list"];
         if ([listOfHourWeather isKindOfClass:[NSArray class]]) {
             self.listOfHourWeather = listOfHourWeather;
+            
+            DMLMenu *menu = (DMLMenu *)[self.collectionView supplementaryViewForElementKind:[DMLCollectionViewHandOffLayout kindOfElement:DMLHandOffLayoutElementMenu] atIndexPath:[NSIndexPath indexPathForItem:0 inSection:0]];
+            [menu updateWithNewDataSource:listOfHourWeather];
             
 //            [self.hourWeatherCollectionView reloadData];
         }
@@ -1182,15 +1241,15 @@ static CGFloat const sWeatherDetailInfoCellHeight = 52.0;
     return _locationManager;
 }
 
-//- (NSDateFormatter *)dateFormatter
-//{
-//    if (!_dateFormatter) {
-//        _dateFormatter = [[NSDateFormatter alloc] init];
-//        _dateFormatter.dateFormat = @"EEEE";
-//    }
-//    return _dateFormatter;
-//}
-//
+- (NSDateFormatter *)dateFormatter
+{
+    if (!_dateFormatter) {
+        _dateFormatter = [[NSDateFormatter alloc] init];
+        _dateFormatter.dateFormat = @"EEEE";
+    }
+    return _dateFormatter;
+}
+
 //- (NSDateFormatter *)hourDateFormatter
 //{
 //    if (!_hourDateFormatter) {
@@ -1212,7 +1271,15 @@ static CGFloat const sWeatherDetailInfoCellHeight = 52.0;
 - (NSMutableDictionary *)weatherConditions
 {
     if (!_weatherConditions) {
-        _weatherConditions = @{}.mutableCopy;
+        _weatherConditions = @{
+                               sChanceOfRainKey : @"20%",
+                               sFeelsLikeKey : @"37",
+                               sPrecipitationKey : @"5.1mm",
+                               sVisibilityKey : @"14.5 km",
+                               sUVIndexKey : @"7",
+                               sAQIKey : @"43",
+                               sAirQualityKey : @"good"
+                               }.mutableCopy;
     }
     return _weatherConditions;
 }
@@ -1230,7 +1297,9 @@ static CGFloat const sWeatherDetailInfoCellHeight = 52.0;
                                       sPrecipitationKey,
                                       sPressureKey,
                                       sVisibilityKey,
-                                      sUVIndexKey
+                                      sUVIndexKey,
+                                      sAQIKey,
+                                      sAirQualityKey
                                       ];
     }
     return _weatherConditionKeyPairs;

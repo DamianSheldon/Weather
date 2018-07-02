@@ -16,6 +16,8 @@
 @property (nonatomic, readonly) UILabel *maxTemperatureLabel;
 @property (nonatomic, readonly) UILabel *minTemperatureLabel;
 
-@property (nonatomic, copy) NSArray *listOfHourWeather;
+- (void)configureTemperatureWithDict:(NSDictionary *)dict;
+
+- (void)updateWithNewDataSource:(NSArray *)newData;
 
 @end

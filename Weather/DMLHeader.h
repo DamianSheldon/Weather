@@ -14,4 +14,6 @@
 @property (nonatomic, readonly) UILabel *weatherLabel;
 @property (nonatomic, readonly) UILabel *temperatureLabel;
 
+- (void)configureWithDict:(NSDictionary *)dict;
+
 @end
