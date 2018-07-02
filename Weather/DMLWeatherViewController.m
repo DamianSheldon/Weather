@@ -253,9 +253,10 @@ static NSInteger const sWeatherDetailInfoEntries = 6;
                 NSDictionary *forecastWeather = self.listOfForecastWeather[indexPath.row];
     
                 NSDictionary *temp = forecastWeather[@"temp"];
-    
-                dailyWeatherCell.maxTemperatureLabel.text = [NSString stringWithFormat:@"%@", temp[@"max"]];
-                dailyWeatherCell.minTemperatureLabel.text = [NSString stringWithFormat:@"%@", temp[@"min"]];
+                NSNumber *max = temp[@"max"];
+                NSNumber *min = temp[@"min"];
+                dailyWeatherCell.maxTemperatureLabel.text = [NSString stringWithFormat:@"%.2f", [max doubleValue]];
+                dailyWeatherCell.minTemperatureLabel.text = [NSString stringWithFormat:@"%.2f", [min doubleValue]];
     
                 NSArray *weathers = forecastWeather[@"weather"];
                 if (weathers.count > 0) {
