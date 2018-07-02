@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		58147DC020E3700000B5E4EE /* DMLCollectionViewHandOffLayoutAttributes.m in Sources */ = {isa = PBXBuildFile; fileRef = 58147DBF20E3700000B5E4EE /* DMLCollectionViewHandOffLayoutAttributes.m */; };
+		58147DC320E3709200B5E4EE /* DMLCollectionViewHandOffLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 58147DC220E3709200B5E4EE /* DMLCollectionViewHandOffLayout.m */; };
+		58147DC620E381D000B5E4EE /* DMLHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 58147DC520E381D000B5E4EE /* DMLHeader.m */; };
+		58147DC920E3821900B5E4EE /* DMLMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 58147DC820E3821900B5E4EE /* DMLMenu.m */; };
+		58147DCF20E9B4E600B5E4EE /* DMLTextCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 58147DCE20E9B4E600B5E4EE /* DMLTextCollectionViewCell.m */; };
 		5821B3381DDEE27C0025BC24 /* DMLPerThreeHourForecastAPIManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5821B3371DDEE27C0025BC24 /* DMLPerThreeHourForecastAPIManager.m */; };
 		5835E8AF1DBEE8F000A68F63 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 5835E8AE1DBEE8F000A68F63 /* main.m */; };
 		5835E8B21DBEE8F100A68F63 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5835E8B11DBEE8F000A68F63 /* AppDelegate.m */; };
@@ -20,8 +25,8 @@
 		588032CB1DD179D8003AFF96 /* NSUserDefaults+DMLAppSpecific.m in Sources */ = {isa = PBXBuildFile; fileRef = 588032CA1DD179D8003AFF96 /* NSUserDefaults+DMLAppSpecific.m */; };
 		588032CE1DD181E0003AFF96 /* NSTimer+EOCBlocksSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = 588032CD1DD181E0003AFF96 /* NSTimer+EOCBlocksSupport.m */; };
 		589D21621DC1DF3100CA0905 /* DMLWeatherCollectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 589D21611DC1DF3000CA0905 /* DMLWeatherCollectionCell.m */; };
-		589D21651DC1EF1E00CA0905 /* DMLWeatherTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 589D21641DC1EF1E00CA0905 /* DMLWeatherTableCell.m */; };
-		589D21681DC1FB8900CA0905 /* DMLSubtitleTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 589D21671DC1FB8900CA0905 /* DMLSubtitleTableCell.m */; };
+		589D21651DC1EF1E00CA0905 /* DMLDailyWeatherCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 589D21641DC1EF1E00CA0905 /* DMLDailyWeatherCell.m */; };
+		589D21681DC1FB8900CA0905 /* DMLDetailWeatherCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 589D21671DC1FB8900CA0905 /* DMLDetailWeatherCell.m */; };
 		589D216B1DC73D1800CA0905 /* UIImage+DMLAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 589D216A1DC73D1800CA0905 /* UIImage+DMLAdditions.m */; };
 		589D216E1DC741FD00CA0905 /* DMLHairLineDecorateView.m in Sources */ = {isa = PBXBuildFile; fileRef = 589D216D1DC741FD00CA0905 /* DMLHairLineDecorateView.m */; };
 		58B789441DDC0D1F007765BB /* DMLDailyForecastAPIManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 58B789431DDC0D1F007765BB /* DMLDailyForecastAPIManager.m */; };
@@ -42,6 +47,17 @@
 /* Begin PBXFileReference section */
 		1CE86DB7177B6D00C77CA523 /* Pods-WeatherTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WeatherTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-WeatherTests/Pods-WeatherTests.debug.xcconfig"; sourceTree = "<group>"; };
 		38A91B53C7E7B82124AB0307 /* Pods-Weather.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Weather.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Weather/Pods-Weather.debug.xcconfig"; sourceTree = "<group>"; };
+		58147DBE20E3700000B5E4EE /* DMLCollectionViewHandOffLayoutAttributes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DMLCollectionViewHandOffLayoutAttributes.h; sourceTree = "<group>"; };
+		58147DBF20E3700000B5E4EE /* DMLCollectionViewHandOffLayoutAttributes.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DMLCollectionViewHandOffLayoutAttributes.m; sourceTree = "<group>"; };
+		58147DC120E3709200B5E4EE /* DMLCollectionViewHandOffLayout.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DMLCollectionViewHandOffLayout.h; sourceTree = "<group>"; };
+		58147DC220E3709200B5E4EE /* DMLCollectionViewHandOffLayout.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DMLCollectionViewHandOffLayout.m; sourceTree = "<group>"; };
+		58147DC420E381D000B5E4EE /* DMLHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DMLHeader.h; sourceTree = "<group>"; };
+		58147DC520E381D000B5E4EE /* DMLHeader.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DMLHeader.m; sourceTree = "<group>"; };
+		58147DC720E3821900B5E4EE /* DMLMenu.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DMLMenu.h; sourceTree = "<group>"; };
+		58147DC820E3821900B5E4EE /* DMLMenu.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DMLMenu.m; sourceTree = "<group>"; };
+		58147DCB20E38F2B00B5E4EE /* DMLCollectionViewDelegateHandOffLayout.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DMLCollectionViewDelegateHandOffLayout.h; sourceTree = "<group>"; };
+		58147DCD20E9B4E600B5E4EE /* DMLTextCollectionViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DMLTextCollectionViewCell.h; sourceTree = "<group>"; };
+		58147DCE20E9B4E600B5E4EE /* DMLTextCollectionViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DMLTextCollectionViewCell.m; sourceTree = "<group>"; };
 		5821B3361DDEE27C0025BC24 /* DMLPerThreeHourForecastAPIManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DMLPerThreeHourForecastAPIManager.h; sourceTree = "<group>"; };
 		5821B3371DDEE27C0025BC24 /* DMLPerThreeHourForecastAPIManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DMLPerThreeHourForecastAPIManager.m; sourceTree = "<group>"; };
 		5835E8AA1DBEE8EF00A68F63 /* Weather.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Weather.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -68,10 +84,10 @@
 		588032CD1DD181E0003AFF96 /* NSTimer+EOCBlocksSupport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSTimer+EOCBlocksSupport.m"; sourceTree = "<group>"; };
 		589D21601DC1DF3000CA0905 /* DMLWeatherCollectionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DMLWeatherCollectionCell.h; sourceTree = "<group>"; };
 		589D21611DC1DF3000CA0905 /* DMLWeatherCollectionCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DMLWeatherCollectionCell.m; sourceTree = "<group>"; };
-		589D21631DC1EF1E00CA0905 /* DMLWeatherTableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DMLWeatherTableCell.h; sourceTree = "<group>"; };
-		589D21641DC1EF1E00CA0905 /* DMLWeatherTableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DMLWeatherTableCell.m; sourceTree = "<group>"; };
-		589D21661DC1FB8900CA0905 /* DMLSubtitleTableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DMLSubtitleTableCell.h; sourceTree = "<group>"; };
-		589D21671DC1FB8900CA0905 /* DMLSubtitleTableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DMLSubtitleTableCell.m; sourceTree = "<group>"; };
+		589D21631DC1EF1E00CA0905 /* DMLDailyWeatherCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DMLDailyWeatherCell.h; sourceTree = "<group>"; };
+		589D21641DC1EF1E00CA0905 /* DMLDailyWeatherCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DMLDailyWeatherCell.m; sourceTree = "<group>"; };
+		589D21661DC1FB8900CA0905 /* DMLDetailWeatherCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DMLDetailWeatherCell.h; sourceTree = "<group>"; };
+		589D21671DC1FB8900CA0905 /* DMLDetailWeatherCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DMLDetailWeatherCell.m; sourceTree = "<group>"; };
 		589D21691DC73D1800CA0905 /* UIImage+DMLAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+DMLAdditions.h"; sourceTree = "<group>"; };
 		589D216A1DC73D1800CA0905 /* UIImage+DMLAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+DMLAdditions.m"; sourceTree = "<group>"; };
 		589D216C1DC741FD00CA0905 /* DMLHairLineDecorateView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DMLHairLineDecorateView.h; sourceTree = "<group>"; };
@@ -150,12 +166,18 @@
 			children = (
 				589D21601DC1DF3000CA0905 /* DMLWeatherCollectionCell.h */,
 				589D21611DC1DF3000CA0905 /* DMLWeatherCollectionCell.m */,
-				589D21631DC1EF1E00CA0905 /* DMLWeatherTableCell.h */,
-				589D21641DC1EF1E00CA0905 /* DMLWeatherTableCell.m */,
-				589D21661DC1FB8900CA0905 /* DMLSubtitleTableCell.h */,
-				589D21671DC1FB8900CA0905 /* DMLSubtitleTableCell.m */,
+				589D21631DC1EF1E00CA0905 /* DMLDailyWeatherCell.h */,
+				589D21641DC1EF1E00CA0905 /* DMLDailyWeatherCell.m */,
+				589D21661DC1FB8900CA0905 /* DMLDetailWeatherCell.h */,
+				589D21671DC1FB8900CA0905 /* DMLDetailWeatherCell.m */,
 				589D216C1DC741FD00CA0905 /* DMLHairLineDecorateView.h */,
 				589D216D1DC741FD00CA0905 /* DMLHairLineDecorateView.m */,
+				58147DC420E381D000B5E4EE /* DMLHeader.h */,
+				58147DC520E381D000B5E4EE /* DMLHeader.m */,
+				58147DC720E3821900B5E4EE /* DMLMenu.h */,
+				58147DC820E3821900B5E4EE /* DMLMenu.m */,
+				58147DCD20E9B4E600B5E4EE /* DMLTextCollectionViewCell.h */,
+				58147DCE20E9B4E600B5E4EE /* DMLTextCollectionViewCell.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -176,6 +198,32 @@
 				5835E8B11DBEE8F000A68F63 /* AppDelegate.m */,
 			);
 			name = AppDelegate;
+			sourceTree = "<group>";
+		};
+		58147DBD20E36A4A00B5E4EE /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				58147DBE20E3700000B5E4EE /* DMLCollectionViewHandOffLayoutAttributes.h */,
+				58147DBF20E3700000B5E4EE /* DMLCollectionViewHandOffLayoutAttributes.m */,
+				58147DC120E3709200B5E4EE /* DMLCollectionViewHandOffLayout.h */,
+				58147DC220E3709200B5E4EE /* DMLCollectionViewHandOffLayout.m */,
+			);
+			name = Classes;
+			sourceTree = "<group>";
+		};
+		58147DCA20E38EEB00B5E4EE /* Protocol */ = {
+			isa = PBXGroup;
+			children = (
+				58147DCB20E38F2B00B5E4EE /* DMLCollectionViewDelegateHandOffLayout.h */,
+			);
+			name = Protocol;
+			sourceTree = "<group>";
+		};
+		58147DCC20E46A2700B5E4EE /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Utils;
 			sourceTree = "<group>";
 		};
 		5835E8A11DBEE8EE00A68F63 = {
@@ -201,6 +249,9 @@
 		5835E8AC1DBEE8F000A68F63 /* Weather */ = {
 			isa = PBXGroup;
 			children = (
+				58147DCC20E46A2700B5E4EE /* Utils */,
+				58147DCA20E38EEB00B5E4EE /* Protocol */,
+				58147DBD20E36A4A00B5E4EE /* Classes */,
 				58147DBC20E3666B00B5E4EE /* AppDelegate */,
 				58147DBB20E3666100B5E4EE /* Controller */,
 				58147DBA20E3665700B5E4EE /* Views */,
@@ -449,14 +500,19 @@
 			files = (
 				5835E8B51DBEE8F100A68F63 /* DMLWeatherViewController.m in Sources */,
 				588032CB1DD179D8003AFF96 /* NSUserDefaults+DMLAppSpecific.m in Sources */,
+				58147DC620E381D000B5E4EE /* DMLHeader.m in Sources */,
 				588032C81DD05B79003AFF96 /* DMLCurrentWeatherAPIManager.m in Sources */,
 				589D216B1DC73D1800CA0905 /* UIImage+DMLAdditions.m in Sources */,
+				58147DC020E3700000B5E4EE /* DMLCollectionViewHandOffLayoutAttributes.m in Sources */,
 				589D216E1DC741FD00CA0905 /* DMLHairLineDecorateView.m in Sources */,
+				58147DC320E3709200B5E4EE /* DMLCollectionViewHandOffLayout.m in Sources */,
 				5835E8D41DBF01F400A68F63 /* UIColor+DMLAdditions.m in Sources */,
-				589D21681DC1FB8900CA0905 /* DMLSubtitleTableCell.m in Sources */,
+				589D21681DC1FB8900CA0905 /* DMLDetailWeatherCell.m in Sources */,
 				5835E8B21DBEE8F100A68F63 /* AppDelegate.m in Sources */,
-				589D21651DC1EF1E00CA0905 /* DMLWeatherTableCell.m in Sources */,
+				58147DCF20E9B4E600B5E4EE /* DMLTextCollectionViewCell.m in Sources */,
+				589D21651DC1EF1E00CA0905 /* DMLDailyWeatherCell.m in Sources */,
 				58B789441DDC0D1F007765BB /* DMLDailyForecastAPIManager.m in Sources */,
+				58147DC920E3821900B5E4EE /* DMLMenu.m in Sources */,
 				588032CE1DD181E0003AFF96 /* NSTimer+EOCBlocksSupport.m in Sources */,
 				5835E8AF1DBEE8F000A68F63 /* main.m in Sources */,
 				5821B3381DDEE27C0025BC24 /* DMLPerThreeHourForecastAPIManager.m in Sources */,

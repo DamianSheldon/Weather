@@ -14,13 +14,20 @@
 #import "NSTimer+EOCBlocksSupport.h"
 
 #import "DMLWeatherViewController.h"
+
 #import "DMLWeatherCollectionCell.h"
-#import "DMLWeatherTableCell.h"
-#import "DMLSubtitleTableCell.h"
-#import "DMLHairLineDecorateView.h"
+#import "DMLDailyWeatherCell.h"
+#import "DMLDetailWeatherCell.h"
+#import "DMLTextCollectionViewCell.h"
+
 #import "DMLCurrentWeatherAPIManager.h"
 #import "DMLDailyForecastAPIManager.h"
 #import "DMLPerThreeHourForecastAPIManager.h"
+
+#import "DMLHeader.h"
+#import "DMLMenu.h"
+#import "DMLCollectionViewHandOffLayout.h"
+#import "DMLCollectionViewDelegateHandOffLayout.h"
 
 @import CoreLocation;
 
@@ -47,35 +54,37 @@
     contentView: | outlineView(230) - hourWeatherView(96) - weekWeatherView(262) - todayWeatherDescribleLable(61) | = 649
  */
 
-static const CGFloat sOutlineViewHeight = 230.0;
-static const CGFloat sContentViewHeight = 589.0;
+//static const CGFloat sOutlineViewHeight = 230.0;
+//static const CGFloat sContentViewHeight = 589.0;
+//
+//static const CGFloat sCollapseOutlineViewHeight = 55.0;
 
-static const CGFloat sCollapseOutlineViewHeight = 55.0;
+//static const CGFloat sDistanceAffectAlpha = 50.0;
 
-static const CGFloat sDistanceAffectAlpha = 50.0;
-
-static const CGFloat sLocationLabelHeight = 34.0;
-static const CGFloat sWeatherLabelHeight = 21.0;
-static const CGFloat sTemperatureLabelHeight = 112.0;
-
-static const CGFloat sMaxTopPaddingOfLocationLabel = 30.0;
-
-static const CGFloat sTodayViewHeight = 27.0;
+//static const CGFloat sLocationLabelHeight = 34.0;
+//static const CGFloat sWeatherLabelHeight = 21.0;
+//static const CGFloat sTemperatureLabelHeight = 112.0;
+//
+//static const CGFloat sMaxTopPaddingOfLocationLabel = 30.0;
+//
+//static const CGFloat sTodayViewHeight = 27.0;
 static const CGFloat sHourWeatherViewHeight = 96.0;
 
 static const CGFloat sItemWidth = 75.0;
 
-static const CGFloat sWeatherCellHeight = 32.0;
-static const CGFloat sSubtitleCellHeight = 52.0;
+//static const CGFloat sWeatherCellHeight = 32.0;
+//static const CGFloat sSubtitleCellHeight = 52.0;
 
-static const CGFloat sStandarPadding = 20.0;
-
-static const NSUInteger sWeatherForecastSections = 2;
+//static const CGFloat sStandarPadding = 20.0;
+//
+//static const NSUInteger sWeatherForecastSections = 2;
 static const NSUInteger sDaysOfForecast = 9;
 
-static NSString *const sWeatherCollectionCellIdentifier = @"sWeatherCollectionCellIdentifier";
-static NSString *const sWeatherTableCellIdentifier = @"sWeatherTableCellIdentifier";
-static NSString *const sSubtitleTableCellIdentifier = @"sSubtitleTableCellIdentifier";
+static NSString *const sWeatherCollectionCellIdentifier = @"WeatherCollectionCell";
+
+static NSString *const sDailyWeatherCellIdentifier = @"DailyWeatherCell";
+static NSString *const sDetailWeatherCellIdentifier = @"DetailWeatherCell";
+static NSString *const sTodayDescribeCellIdentifier = @"TodayDescribeCell";
 
 static NSString *const sSunriseKey = @"Sunrise";
 static NSString *const sSunsetKey = @"Sunset";
@@ -88,34 +97,39 @@ static NSString *const sPressureKey = @"Pressure";
 static NSString *const sVisibilityKey = @"Visibility";
 static NSString *const sUVIndexKey = @"UV Index";
 
+static NSString *const sWeatherHeaderReuseIdentifier = @"WeatherHeader";
+static NSString *const sWeatherMenuReuseIdentifier = @"WeatherMenu";
+
 static NSString *const sWeatherIconBaseURLString = @"http://openweathermap.org/img/w/";
 
-@interface DMLWeatherViewController ()<UIScrollViewDelegate, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UITableViewDataSource, UITableViewDelegate, CTAPIManagerParamSource, CTAPIManagerCallBackDelegate, CLLocationManagerDelegate>
+@interface DMLWeatherViewController ()</*UIScrollViewDelegate, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UITableViewDataSource, UITableViewDelegate, */UICollectionViewDataSource, CTAPIManagerParamSource, CTAPIManagerCallBackDelegate, CLLocationManagerDelegate, DMLCollectionViewDelegateHandOffLayout>
 
-@property (nonatomic) UIScrollView *scrollView;
-@property (nonatomic) UIView *contentView;
+@property (nonatomic) UICollectionView *collectionView;
 
-@property (nonatomic) UIView *outlineView;
-@property (nonatomic) UILabel *locationLabel;
-@property (nonatomic) UILabel *weatherLabel;
-@property (nonatomic) UILabel *temperatureLabel;
-
-@property (nonatomic) UIView *dynamicView;
-
-@property (nonatomic) UIView *todayView;
-@property (nonatomic) UILabel *dayLabel;
-@property (nonatomic) UILabel *maxTemperatureLabel;
-@property (nonatomic) UILabel *minTemperatureLabel;
-
-@property (nonatomic) UICollectionView *hourWeatherCollectionView;
-@property (nonatomic) DMLHairLineDecorateView *upperHairLineView;
-@property (nonatomic) DMLHairLineDecorateView *lowerHairLineView;
-
-@property (nonatomic) UITableView *tableView;
+//@property (nonatomic) UIScrollView *scrollView;
+//@property (nonatomic) UIView *contentView;
+//
+//@property (nonatomic) UIView *outlineView;
+//@property (nonatomic) UILabel *locationLabel;
+//@property (nonatomic) UILabel *weatherLabel;
+//@property (nonatomic) UILabel *temperatureLabel;
+//
+//@property (nonatomic) UIView *dynamicView;
+//
+//@property (nonatomic) UIView *todayView;
+//@property (nonatomic) UILabel *dayLabel;
+//@property (nonatomic) UILabel *maxTemperatureLabel;
+//@property (nonatomic) UILabel *minTemperatureLabel;
+//
+//@property (nonatomic) UICollectionView *hourWeatherCollectionView;
+//@property (nonatomic) DMLHairLineDecorateView *upperHairLineView;
+//@property (nonatomic) DMLHairLineDecorateView *lowerHairLineView;
+//
+//@property (nonatomic) UITableView *tableView;
 
 @property (nonatomic) UIToolbar *toolbar;
 
-@property (nonatomic) NSLayoutConstraint *topConstraintOfLocationLabel;
+//@property (nonatomic) NSLayoutConstraint *topConstraintOfLocationLabel;
 
 @property (nonatomic) DMLCurrentWeatherAPIManager *currentWeatherAPIManager;
 @property (nonatomic) DMLDailyForecastAPIManager *dailyForecastAPIManager;
@@ -125,8 +139,8 @@ static NSString *const sWeatherIconBaseURLString = @"http://openweathermap.org/i
 
 @property (nonatomic) NSTimer *weatherUpdateTimer;
 
-@property (nonatomic) NSDateFormatter *dateFormatter;
-@property (nonatomic) NSDateFormatter *hourDateFormatter;
+//@property (nonatomic) NSDateFormatter *dateFormatter;
+//@property (nonatomic) NSDateFormatter *hourDateFormatter;
 @property (nonatomic) NSDateFormatter *hhmmDateFormatter;
 
 @property (nonatomic, copy) NSArray *listOfForecastWeather;
@@ -144,131 +158,145 @@ static NSString *const sWeatherIconBaseURLString = @"http://openweathermap.org/i
     
     self.view.backgroundColor = [UIColor dml_bostonBlue];
     
-    // Set up root view hierarchy
-    [self.view addSubview:self.outlineView];
-    [self configureConstraintsForOutlineView];
+    [self.collectionView registerClass:DMLHeader.class forSupplementaryViewOfKind:[DMLCollectionViewHandOffLayout kindOfElement:DMLHandOffLayoutElementHeader] withReuseIdentifier:sWeatherHeaderReuseIdentifier];
+    [self.collectionView registerClass:DMLMenu.class forSupplementaryViewOfKind:[DMLCollectionViewHandOffLayout kindOfElement:DMLHandOffLayoutElementMenu] withReuseIdentifier:sWeatherMenuReuseIdentifier];
     
-    [self.view addSubview:self.scrollView];
-    [self configureConstraintsForScrollView];
+    [self.collectionView registerClass:DMLDailyWeatherCell.class forCellWithReuseIdentifier:sDailyWeatherCellIdentifier];
+    [self.collectionView registerClass:DMLDetailWeatherCell.class forCellWithReuseIdentifier:sDetailWeatherCellIdentifier];
+    [self.collectionView registerClass:DMLTextCollectionViewCell.class forCellWithReuseIdentifier:sTodayDescribeCellIdentifier];
     
-    [self.scrollView addSubview:self.contentView];
-    [self configureConstraintsForContentView];
+    [self.view addSubview:self.collectionView];
+    [self configureConstraintsForCollectionView];
     
-    // View hierarchy of outline view
-    [self.outlineView addSubview:self.locationLabel];
-    [self configureConstraintsForLocationLabel];
-    
-    [self.outlineView addSubview:self.weatherLabel];
-    [self configureConstraintsForWeatherLabel];
-    
-    [self.outlineView addSubview:self.temperatureLabel];
-    [self configureConstraintsForTemperatureLabel];
-    
-    // View hierarchy of content view
-    [self.contentView addSubview:self.todayView];
-    [self configureConstraintsForTodayView];
-    
-    [self.contentView addSubview:self.hourWeatherCollectionView];
-    [self configureConstraintsForHourWeatherCollectionView];
-    
-    // Configure hair line for hour weahter collection view
-    [self.contentView addSubview:self.upperHairLineView];
-    [self.contentView addSubview:self.lowerHairLineView];
-    [self configureConstraintsForUpperHairLineView];
-    [self configureConstraintsForLowerHairLineView];
+//    // Set up root view hierarchy
+//    [self.view addSubview:self.outlineView];
+//    [self configureConstraintsForOutlineView];
+//
+//    [self.view addSubview:self.scrollView];
+//    [self configureConstraintsForScrollView];
+//
+//    [self.scrollView addSubview:self.contentView];
+//    [self configureConstraintsForContentView];
+//
+//    // View hierarchy of outline view
+//    [self.outlineView addSubview:self.locationLabel];
+//    [self configureConstraintsForLocationLabel];
+//
+//    [self.outlineView addSubview:self.weatherLabel];
+//    [self configureConstraintsForWeatherLabel];
+//
+//    [self.outlineView addSubview:self.temperatureLabel];
+//    [self configureConstraintsForTemperatureLabel];
+//
+//    // View hierarchy of content view
+//    [self.contentView addSubview:self.todayView];
+//    [self configureConstraintsForTodayView];
+//
+//    [self.contentView addSubview:self.hourWeatherCollectionView];
+//    [self configureConstraintsForHourWeatherCollectionView];
+//
+//    // Configure hair line for hour weahter collection view
+//    [self.contentView addSubview:self.upperHairLineView];
+//    [self.contentView addSubview:self.lowerHairLineView];
+//    [self configureConstraintsForUpperHairLineView];
+//    [self configureConstraintsForLowerHairLineView];
+//
+//    [self.contentView addSubview:self.tableView];
+//    [self configureConstraintsForTableView];
+//
+//    // View hiearchy of today view
+//    [self.todayView addSubview:self.dayLabel];
+//    [self.todayView addSubview:self.maxTemperatureLabel];
+//    [self.todayView addSubview:self.minTemperatureLabel];
+//
+//    [self configureConstraintsForDayLabel];
+//    [self configureConstraintsForMaxTemperatureLabel];
+//    [self configureConstraintsForMinTemperatureLabel];
 
-    [self.contentView addSubview:self.tableView];
-    [self configureConstraintsForTableView];
-    
-    // View hiearchy of today view
-    [self.todayView addSubview:self.dayLabel];
-    [self.todayView addSubview:self.maxTemperatureLabel];
-    [self.todayView addSubview:self.minTemperatureLabel];
-    
-    [self configureConstraintsForDayLabel];
-    [self configureConstraintsForMaxTemperatureLabel];
-    [self configureConstraintsForMinTemperatureLabel];
-    
     [self.view addSubview:self.toolbar];
     [self configureConstraintsForToolbar];
+    
+    UIEdgeInsets edgeInsets = self.collectionView.contentInset;
+    edgeInsets.bottom = self.toolbar.intrinsicContentSize.height;
+    self.collectionView.contentInset = edgeInsets;
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     
-    CLAuthorizationStatus authorizationStatus = [CLLocationManager authorizationStatus];
-    
-    if (authorizationStatus != kCLAuthorizationStatusRestricted && authorizationStatus != kCLAuthorizationStatusDenied) {
-        self.locationManager.delegate = self;
-        
-        if (authorizationStatus == kCLAuthorizationStatusNotDetermined) {
-            [self.locationManager requestAlwaysAuthorization];
-        }
-        else {
-            if ([CLLocationManager locationServicesEnabled]) {
-                [self.locationManager startUpdatingLocation];
-            }
-        }
-    }
+//    CLAuthorizationStatus authorizationStatus = [CLLocationManager authorizationStatus];
+//
+//    if (authorizationStatus != kCLAuthorizationStatusRestricted && authorizationStatus != kCLAuthorizationStatusDenied) {
+//        self.locationManager.delegate = self;
+//
+//        if (authorizationStatus == kCLAuthorizationStatusNotDetermined) {
+//            [self.locationManager requestAlwaysAuthorization];
+//        }
+//        else {
+//            if ([CLLocationManager locationServicesEnabled]) {
+//                [self.locationManager startUpdatingLocation];
+//            }
+//        }
+//    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
     
-    [self.locationManager stopUpdatingLocation];
-    
-    self.locationManager.delegate = nil;
-    
-    if ([self.weatherUpdateTimer isValid]) {
-        [self.weatherUpdateTimer invalidate];
-    }
-    
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+//    [self.locationManager stopUpdatingLocation];
+//
+//    self.locationManager.delegate = nil;
+//
+//    if ([self.weatherUpdateTimer isValid]) {
+//        [self.weatherUpdateTimer invalidate];
+//    }
+//
+//    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
 }
 
 #pragma mark - UIScrollViewDelegate
 
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView
-{
-//    NSLog(@"%s\n", __PRETTY_FUNCTION__);
-    
-    CGFloat yOffset = scrollView.contentOffset.y;
-    
-    if (scrollView == self.scrollView) {
-        CGFloat yIntentset = sOutlineViewHeight - sCollapseOutlineViewHeight;
-        
-        if (yOffset > sDistanceAffectAlpha - yIntentset) {
-            self.temperatureLabel.alpha = 0.0;
-        }
-        else if (yOffset < -yIntentset) {
-            self.temperatureLabel.alpha = 1.0;
-        }
-        else {
-            // 1 / sDistanceAffectAlpha * distance = 1 / 50 * (yIntentset - sDistanceAffectAlpha + yOffset) = 0.02 * (yIntentset - sDistanceAffectAlpha + yOffset)
-            self.temperatureLabel.alpha = -0.02 * (yIntentset - sDistanceAffectAlpha + yOffset);
-//            NSLog(@"Alpha:%.2f\n", self.temperatureLabel.alpha);
-        }
-        
-        // Sync today view's alpha with temperature label
-        self.todayView.alpha = self.temperatureLabel.alpha;
-        
-        // Animate location label
-        if (yOffset > 0) {
-            self.topConstraintOfLocationLabel.constant = 0;
-        }
-        else if (yOffset < -(yIntentset - sDistanceAffectAlpha)) {
-            self.topConstraintOfLocationLabel.constant = sMaxTopPaddingOfLocationLabel;
-        }
-        else {
-            // sMaxTopPaddingOfLocationLabel / 125 * yOffset = 30 / 125 * yOffset = 0.24 * yOffset
-            self.topConstraintOfLocationLabel.constant = -0.24 * yOffset;
-        }
-        
-        [self.outlineView setNeedsUpdateConstraints];
-    }
-}
+//- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+//{
+////    NSLog(@"%s\n", __PRETTY_FUNCTION__);
+//
+//    CGFloat yOffset = scrollView.contentOffset.y;
+//
+//    if (scrollView == self.scrollView) {
+//        CGFloat yIntentset = sOutlineViewHeight - sCollapseOutlineViewHeight;
+//
+//        if (yOffset > sDistanceAffectAlpha - yIntentset) {
+//            self.temperatureLabel.alpha = 0.0;
+//        }
+//        else if (yOffset < -yIntentset) {
+//            self.temperatureLabel.alpha = 1.0;
+//        }
+//        else {
+//            // 1 / sDistanceAffectAlpha * distance = 1 / 50 * (yIntentset - sDistanceAffectAlpha + yOffset) = 0.02 * (yIntentset - sDistanceAffectAlpha + yOffset)
+//            self.temperatureLabel.alpha = -0.02 * (yIntentset - sDistanceAffectAlpha + yOffset);
+////            NSLog(@"Alpha:%.2f\n", self.temperatureLabel.alpha);
+//        }
+//
+//        // Sync today view's alpha with temperature label
+//        self.todayView.alpha = self.temperatureLabel.alpha;
+//
+//        // Animate location label
+//        if (yOffset > 0) {
+//            self.topConstraintOfLocationLabel.constant = 0;
+//        }
+//        else if (yOffset < -(yIntentset - sDistanceAffectAlpha)) {
+//            self.topConstraintOfLocationLabel.constant = sMaxTopPaddingOfLocationLabel;
+//        }
+//        else {
+//            // sMaxTopPaddingOfLocationLabel / 125 * yOffset = 30 / 125 * yOffset = 0.24 * yOffset
+//            self.topConstraintOfLocationLabel.constant = -0.24 * yOffset;
+//        }
+//
+//        [self.outlineView setNeedsUpdateConstraints];
+//    }
+//}
 
 //- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 //{
@@ -338,36 +366,139 @@ static NSString *const sWeatherIconBaseURLString = @"http://openweathermap.org/i
 
 #pragma mark - UICollectionViewDataSource
 
+static NSInteger const sWeatherInfoSections = 3;
+static NSInteger const sWeatherDetailInfoEntries = 6;
+//static NSInteger const sTodayEveryHourAndSunRiseSetItems = 26;
+
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
+{
+//    if (collectionView == self.collectionView) {
+//        return sWeatherInfoSections;
+//    }
+//    else {
+//        return 1;
+//    }
+    return sWeatherInfoSections;
+}
+
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return 24;
+//    if (collectionView == self.collectionView) {
+//        switch (section) {
+//            case 0:
+//                return sDaysOfForecast;
+//            case 1:
+//                return 1;
+//            case 2:
+//                return sWeatherDetailInfoEntries;
+//            default:
+//                return 0;
+//        }
+//    }
+//    else {
+//        return sTodayEveryHourAndSunRiseSetItems;
+//    }
+    switch (section) {
+        case 0:
+            return sDaysOfForecast;
+        case 1:
+            return 1;
+        case 2:
+            return sWeatherDetailInfoEntries;
+        default:
+            return 0;
+    }
 }
 
 - (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    DMLWeatherCollectionCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:sWeatherCollectionCellIdentifier forIndexPath:indexPath];
+    UICollectionViewCell *cell;
     
-    NSUInteger mappedIndex = indexPath.row / 3;// Per three hour forecast
+//    if (collectionView == self.collectionView) {
+//        cell = [collectionView dequeueReusableCellWithReuseIdentifier:sWeatherPerDayCellIdentifier forIndexPath:indexPath];
+//    }
+//    else {
+//        cell = [collectionView dequeueReusableCellWithReuseIdentifier:sWeatherCollectionCellIdentifier forIndexPath:indexPath];
+//
+//        NSUInteger mappedIndex = indexPath.row / 3;// Per three hour forecast
+//
+//        if (mappedIndex < self.listOfHourWeather.count) {
+//            NSDictionary *hourForecastWeather = self.listOfHourWeather[mappedIndex];
+//            NSArray *weathers = hourForecastWeather[@"weather"];
+//            if (weathers.count > 0) {
+//                NSDictionary *weather = weathers.firstObject;
+//
+//                NSString *weatherIconString = [NSString stringWithFormat:@"%@%@.png", sWeatherIconBaseURLString, weather[@"icon"]];
+//
+//                [cell.weatherImageView setImageWithURL:[NSURL URLWithString:weatherIconString]];
+//            }
+//
+//            NSDictionary *temp = hourForecastWeather[@"main"];
+//            cell.temperatureLabel.text = [NSString stringWithFormat:@"%@", temp[@"temp"]];
+//
+//            NSDate *date = [[NSCalendar currentCalendar] dateByAddingUnit:NSCalendarUnitHour value:indexPath.row toDate:[NSDate date] options:0];
+////            cell.hourLabel.text = [self.hourDateFormatter stringFromDate:date];
+//        }
+//    }
     
-    if (mappedIndex < self.listOfHourWeather.count) {
-        NSDictionary *hourForecastWeather = self.listOfHourWeather[mappedIndex];
-        NSArray *weathers = hourForecastWeather[@"weather"];
-        if (weathers.count > 0) {
-            NSDictionary *weather = weathers.firstObject;
+    switch (indexPath.section) {
+        case 0: {
+            DMLDailyWeatherCell *dailyWeatherCell = [collectionView dequeueReusableCellWithReuseIdentifier:sDailyWeatherCellIdentifier forIndexPath:indexPath];
             
-            NSString *weatherIconString = [NSString stringWithFormat:@"%@%@.png", sWeatherIconBaseURLString, weather[@"icon"]];
+            dailyWeatherCell.dayLabel.text = @"星期五";
+            dailyWeatherCell.maxTemperatureLabel.text = @"34";
+            dailyWeatherCell.minTemperatureLabel.text = @"27";
             
-            [cell.weatherImageView setImageWithURL:[NSURL URLWithString:weatherIconString]];
+            cell = dailyWeatherCell;
+            break;
         }
         
-        NSDictionary *temp = hourForecastWeather[@"main"];
-        cell.temperatureLabel.text = [NSString stringWithFormat:@"%@", temp[@"temp"]];
-        
-        NSDate *date = [[NSCalendar currentCalendar] dateByAddingUnit:NSCalendarUnitHour value:indexPath.row toDate:[NSDate date] options:0];
-        cell.hourLabel.text = [self.hourDateFormatter stringFromDate:date];
+        case 1: {
+            DMLTextCollectionViewCell *textCell = [collectionView dequeueReusableCellWithReuseIdentifier:sTodayDescribeCellIdentifier forIndexPath:indexPath];
+            textCell.textView.text = @"今天：今日大部多云。当前气温26；最高气温34。";
+            
+            cell = textCell;
+            break;
+        }
+        case 2: {
+            DMLDetailWeatherCell *detailWeatherCell = [collectionView dequeueReusableCellWithReuseIdentifier:sDetailWeatherCellIdentifier forIndexPath:indexPath];
+            
+            detailWeatherCell.leftTitleLabel.text = @"日出";
+            detailWeatherCell.leftValueLabel.text = @"05:33";
+            
+            detailWeatherCell.rightTitleLabel.text = @"日落";
+            detailWeatherCell.rightValueLabel.text = @"19:28";
+            
+            if (indexPath.row + 1 == sWeatherDetailInfoEntries) {
+                detailWeatherCell.separatorLineView.hidden = YES;
+            }
+            
+            cell = detailWeatherCell;
+
+            break;
+        }
+        default:
+            break;
     }
     
     return cell;
+}
+
+- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
+{
+    if ([kind isEqualToString:[DMLCollectionViewHandOffLayout kindOfElement:DMLHandOffLayoutElementHeader]]) {
+        DMLHeader *header = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:sWeatherHeaderReuseIdentifier forIndexPath:indexPath];
+        
+        return header;
+    }
+    
+    if ([kind isEqualToString:[DMLCollectionViewHandOffLayout kindOfElement:DMLHandOffLayoutElementMenu]]) {
+        DMLMenu *menu = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:sWeatherMenuReuseIdentifier forIndexPath:indexPath];
+        
+        return menu;
+    }
+    
+    return nil;
 }
 
 #pragma mark - UICollectionViewDelegateFlowLayout
@@ -377,89 +508,125 @@ static NSString *const sWeatherIconBaseURLString = @"http://openweathermap.org/i
     return CGSizeMake(sItemWidth, sHourWeatherViewHeight);
 }
 
+#pragma mark - DMLCollectionViewDelegateHandOffLayout
+
+static CGFloat const sHeaderHeight = 230.0;
+static CGFloat const sMenuHeight = 124.0;
+
+static CGFloat const sDailyForecastCellHeight = 32.0;
+static CGFloat const sTodayWeatherDescribeCellHeight = 60.0;
+static CGFloat const sWeatherDetailInfoCellHeight = 52.0;
+
+- (CGSize)collectionView:(UICollectionView *)collectionView handOffLayout:(DMLCollectionViewHandOffLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    switch (indexPath.section) {
+        case 0:
+            return CGSizeMake(CGRectGetWidth(collectionView.frame), sDailyForecastCellHeight);
+            
+        case 1:
+            return CGSizeMake(CGRectGetWidth(collectionView.frame), sTodayWeatherDescribeCellHeight);
+            
+        case 2:
+            return CGSizeMake(CGRectGetWidth(collectionView.frame), sWeatherDetailInfoCellHeight);
+            
+        default:
+            return CGSizeZero;
+    }
+}
+
+- (CGSize)collectionViewReferenceSizeForHeader:(UICollectionView *)collectionView handOffLayout:(DMLCollectionViewHandOffLayout*)collectionViewLayout
+{
+    return CGSizeMake(CGRectGetWidth(collectionView.frame), sHeaderHeight);
+}
+
+- (CGSize)collectionViewReferenceSizeForMenu:(UICollectionView *)collectionView handOffLayout:(DMLCollectionViewHandOffLayout*)collectionViewLayout
+{
+    return CGSizeMake(CGRectGetWidth(collectionView.frame), sMenuHeight);
+}
+
 #pragma mark - UITableViewDataSource
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return sWeatherForecastSections;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    if (section) {
-        return self.weatherConditionKeyPairs.count / 2;
-    }
-    else {
-        return sDaysOfForecast;
-    }
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    UITableViewCell *cell;
-    
-    if (indexPath.section) {
-        DMLSubtitleTableCell *subtitleCell = [tableView dequeueReusableCellWithIdentifier:sSubtitleTableCellIdentifier forIndexPath:indexPath];
-        
-        NSUInteger keyIndex = indexPath.row * 2;
-        
-        NSString *key = self.weatherConditionKeyPairs[keyIndex];
-        NSString *subKey = self.weatherConditionKeyPairs[keyIndex + 1];
-        
-        subtitleCell.titleLabel.text = [key stringByAppendingString:@":"];
-        subtitleCell.titleValueLabel.text = self.weatherConditions[key];
-        
-        subtitleCell.subtitleLabel.text = [subKey stringByAppendingString:@":"];
-        subtitleCell.subtitleValueLabel.text = self.weatherConditions[subKey];
-        
-        cell = subtitleCell;
-    }
-    else {
-        DMLWeatherTableCell *weatherCell = [tableView dequeueReusableCellWithIdentifier:sWeatherTableCellIdentifier forIndexPath:indexPath];
-        
-        NSDate *date = [[NSCalendar currentCalendar] dateByAddingUnit:NSCalendarUnitDay value:indexPath.row + 1 toDate:[NSDate date] options:0];
-        
-        weatherCell.dayLabel.text = [self.dateFormatter stringFromDate:date];
-        
-        if (indexPath.row < self.listOfForecastWeather.count) {
-            NSDictionary *forecastWeather = self.listOfForecastWeather[indexPath.row];
-            
-            NSDictionary *temp = forecastWeather[@"temp"];
-            
-            weatherCell.maxTemperatureLabel.text = [NSString stringWithFormat:@"%@", temp[@"max"]];
-            weatherCell.minTemperatureLabel.text = [NSString stringWithFormat:@"%@", temp[@"min"]];
-            
-            NSArray *weathers = forecastWeather[@"weather"];
-            if (weathers.count > 0) {
-                NSDictionary *weather = weathers.firstObject;
-                
-                NSString *weatherIconString = [NSString stringWithFormat:@"%@%@.png", sWeatherIconBaseURLString, weather[@"icon"]];
-                
-                [weatherCell.weatherImageView setImageWithURL:[NSURL URLWithString:weatherIconString]];
-            }
-        }
-        else {
-            weatherCell.maxTemperatureLabel.text = @"-";
-            weatherCell.minTemperatureLabel.text = @"-";
-        }
-        
-        cell = weatherCell;
-    }
-    
-    return cell;
-}
-
-#pragma mark - UITableViewDelegate
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (indexPath.section) {
-        return sSubtitleCellHeight;
-    }
-    else {
-        return sWeatherCellHeight;
-    }
-}
+//- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+//{
+//    return sWeatherForecastSections;
+//}
+//
+//- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+//{
+//    if (section) {
+//        return self.weatherConditionKeyPairs.count / 2;
+//    }
+//    else {
+//        return sDaysOfForecast;
+//    }
+//}
+//
+//- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    UITableViewCell *cell;
+//
+//    if (indexPath.section) {
+//        DMLSubtitleTableCell *subtitleCell = [tableView dequeueReusableCellWithIdentifier:sSubtitleTableCellIdentifier forIndexPath:indexPath];
+//
+//        NSUInteger keyIndex = indexPath.row * 2;
+//
+//        NSString *key = self.weatherConditionKeyPairs[keyIndex];
+//        NSString *subKey = self.weatherConditionKeyPairs[keyIndex + 1];
+//
+//        subtitleCell.titleLabel.text = [key stringByAppendingString:@":"];
+//        subtitleCell.titleValueLabel.text = self.weatherConditions[key];
+//
+//        subtitleCell.subtitleLabel.text = [subKey stringByAppendingString:@":"];
+//        subtitleCell.subtitleValueLabel.text = self.weatherConditions[subKey];
+//
+//        cell = subtitleCell;
+//    }
+//    else {
+//        DMLWeatherTableCell *weatherCell = [tableView dequeueReusableCellWithIdentifier:sWeatherTableCellIdentifier forIndexPath:indexPath];
+//
+//        NSDate *date = [[NSCalendar currentCalendar] dateByAddingUnit:NSCalendarUnitDay value:indexPath.row + 1 toDate:[NSDate date] options:0];
+//
+//        weatherCell.dayLabel.text = [self.dateFormatter stringFromDate:date];
+//
+//        if (indexPath.row < self.listOfForecastWeather.count) {
+//            NSDictionary *forecastWeather = self.listOfForecastWeather[indexPath.row];
+//
+//            NSDictionary *temp = forecastWeather[@"temp"];
+//
+//            weatherCell.maxTemperatureLabel.text = [NSString stringWithFormat:@"%@", temp[@"max"]];
+//            weatherCell.minTemperatureLabel.text = [NSString stringWithFormat:@"%@", temp[@"min"]];
+//
+//            NSArray *weathers = forecastWeather[@"weather"];
+//            if (weathers.count > 0) {
+//                NSDictionary *weather = weathers.firstObject;
+//
+//                NSString *weatherIconString = [NSString stringWithFormat:@"%@%@.png", sWeatherIconBaseURLString, weather[@"icon"]];
+//
+//                [weatherCell.weatherImageView setImageWithURL:[NSURL URLWithString:weatherIconString]];
+//            }
+//        }
+//        else {
+//            weatherCell.maxTemperatureLabel.text = @"-";
+//            weatherCell.minTemperatureLabel.text = @"-";
+//        }
+//
+//        cell = weatherCell;
+//    }
+//
+//    return cell;
+//}
+//
+//#pragma mark - UITableViewDelegate
+//
+//- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    if (indexPath.section) {
+//        return sSubtitleCellHeight;
+//    }
+//    else {
+//        return sWeatherCellHeight;
+//    }
+//}
 
 #pragma mark - CTAPIManagerParamSource
 - (NSDictionary *)paramsForApi:(CTAPIBaseManager *)manager
@@ -502,21 +669,21 @@ static NSString *const sWeatherIconBaseURLString = @"http://openweathermap.org/i
         if (weathers.count > 0) {
             NSDictionary *weather = weathers.firstObject;
             
-            self.weatherLabel.text = weather[@"main"];
+//            self.weatherLabel.text = weather[@"main"];
 
         }
         
-        self.locationLabel.text = responseDictionary[@"name"];
-
-        NSDictionary *main = responseDictionary[@"main"];
+//        self.locationLabel.text = responseDictionary[@"name"];
+//
+//        NSDictionary *main = responseDictionary[@"main"];
+//
+//        self.temperatureLabel.text = [NSString stringWithFormat:@"%@ᵒ", main[@"temp"]];
+//
+//        self.maxTemperatureLabel.text = [NSString stringWithFormat:@"%@", main[@"temp_max"]];
+//        self.minTemperatureLabel.text = [NSString stringWithFormat:@"%@", main[@"temp_min"]];
         
-        self.temperatureLabel.text = [NSString stringWithFormat:@"%@ᵒ", main[@"temp"]];
-        
-        self.maxTemperatureLabel.text = [NSString stringWithFormat:@"%@", main[@"temp_max"]];
-        self.minTemperatureLabel.text = [NSString stringWithFormat:@"%@", main[@"temp_min"]];
-        
-        self.weatherConditions[sPressureKey] = [NSString stringWithFormat:@"%@ hPa", main[@"pressure"]];
-        self.weatherConditions[sHumidityKey] = [NSString stringWithFormat:@"%@ %%", main[@"humidity"]];
+//        self.weatherConditions[sPressureKey] = [NSString stringWithFormat:@"%@ hPa", main[@"pressure"]];
+//        self.weatherConditions[sHumidityKey] = [NSString stringWithFormat:@"%@ %%", main[@"humidity"]];
         
         NSDictionary *sys = responseDictionary[@"sys"];
         
@@ -530,7 +697,7 @@ static NSString *const sWeatherIconBaseURLString = @"http://openweathermap.org/i
         
         self.weatherConditions[sWindKey] = [NSString stringWithFormat:@"%@ %@m/s", wind[@"deg"], wind[@"speed"]];
         
-        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
+//        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
     }
     else if (manager == self.dailyForecastAPIManager) {
         NSDictionary *responseDictionary = [manager fetchDataWithReformer:nil];
@@ -539,7 +706,7 @@ static NSString *const sWeatherIconBaseURLString = @"http://openweathermap.org/i
         if ([listOfForecastWeather isKindOfClass:[NSArray class]]) {
             self.listOfForecastWeather = listOfForecastWeather;
             
-            [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
+//            [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
         }
     }
     else if (manager == self.perThreeHourForecastAPIManager) {
@@ -548,7 +715,7 @@ static NSString *const sWeatherIconBaseURLString = @"http://openweathermap.org/i
         if ([listOfHourWeather isKindOfClass:[NSArray class]]) {
             self.listOfHourWeather = listOfHourWeather;
             
-            [self.hourWeatherCollectionView reloadData];
+//            [self.hourWeatherCollectionView reloadData];
         }
     }
     
@@ -618,111 +785,127 @@ static NSString *const sWeatherIconBaseURLString = @"http://openweathermap.org/i
 
 #pragma mark - Private Methods
 
-- (void)configureConstraintsForOutlineView
+- (void)configureConstraintsForCollectionView
 {
-    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.outlineView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeLeft multiplier:1.0 constant:0]];
-    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.outlineView attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeRight multiplier:1.0 constant:0]];
-    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.outlineView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.topLayoutGuide attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0]];
-    
-    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.outlineView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:sOutlineViewHeight]];
+    if (@available(iOS 11.0, *)) {
+        [self.view.safeAreaLayoutGuide.leftAnchor constraintEqualToAnchor:self.collectionView.leftAnchor].active = YES;
+        [self.view.safeAreaLayoutGuide.rightAnchor constraintEqualToAnchor:self.collectionView.rightAnchor].active = YES;
+        [self.view.safeAreaLayoutGuide.topAnchor constraintEqualToAnchor:self.collectionView.topAnchor].active = YES;
+        [self.view.safeAreaLayoutGuide.bottomAnchor constraintEqualToAnchor:self.collectionView.bottomAnchor].active = YES;
+    }
+    else {
+        [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.collectionView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeLeft multiplier:1.0 constant:0]];
+        [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.collectionView attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeRight multiplier:1.0 constant:0]];
+        [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.collectionView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.topLayoutGuide attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0]];
+        [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.collectionView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.bottomLayoutGuide attribute:NSLayoutAttributeTop multiplier:1.0 constant:0]];
+    }
 }
 
-- (void)configureConstraintsForScrollView
-{
-    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.scrollView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeLeft multiplier:1.0 constant:0]];
-    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.scrollView attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeRight multiplier:1.0 constant:0]];
-    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.scrollView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.topLayoutGuide attribute:NSLayoutAttributeBottom multiplier:1.0 constant:sCollapseOutlineViewHeight]];
-    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.scrollView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.bottomLayoutGuide attribute:NSLayoutAttributeTop multiplier:1.0 constant:0]];
-}
-
-- (void)configureConstraintsForContentView
-{
-    CGRect fullScreenRect = [[UIScreen mainScreen] applicationFrame];
-
-    [self.scrollView addConstraint:[NSLayoutConstraint constraintWithItem:self.contentView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.scrollView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:0]];
-    [self.scrollView addConstraint:[NSLayoutConstraint constraintWithItem:self.contentView attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.scrollView attribute:NSLayoutAttributeRight multiplier:1.0 constant:0]];
-    [self.scrollView addConstraint:[NSLayoutConstraint constraintWithItem:self.contentView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.scrollView attribute:NSLayoutAttributeTop multiplier:1.0 constant:0]];
-    [self.scrollView addConstraint:[NSLayoutConstraint constraintWithItem:self.contentView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.scrollView attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0]];
-
-    [self.scrollView addConstraint:[NSLayoutConstraint constraintWithItem:self.contentView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:CGRectGetWidth(fullScreenRect)]];
-    [self.scrollView addConstraint:[NSLayoutConstraint constraintWithItem:self.contentView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:sContentViewHeight]];
-}
-
-- (void)configureConstraintsForLocationLabel
-{
-    [self.outlineView addConstraint:[NSLayoutConstraint constraintWithItem:self.locationLabel attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.outlineView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:0]];
-    [self.outlineView addConstraint:[NSLayoutConstraint constraintWithItem:self.locationLabel attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.outlineView attribute:NSLayoutAttributeRight multiplier:1.0 constant:0]];
-    
-    self.topConstraintOfLocationLabel = [NSLayoutConstraint constraintWithItem:self.locationLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.outlineView attribute:NSLayoutAttributeTop multiplier:1.0 constant:sMaxTopPaddingOfLocationLabel];
-    
-    [self.outlineView addConstraint:self.topConstraintOfLocationLabel];
-    
-    [self.outlineView addConstraint:[NSLayoutConstraint constraintWithItem:self.locationLabel attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:sLocationLabelHeight]];
-}
-
-- (void)configureConstraintsForWeatherLabel
-{
-    [self.outlineView addConstraint:[NSLayoutConstraint constraintWithItem:self.weatherLabel attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.outlineView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:0]];
-    [self.outlineView addConstraint:[NSLayoutConstraint constraintWithItem:self.weatherLabel attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.outlineView attribute:NSLayoutAttributeRight multiplier:1.0 constant:0]];
-    [self.outlineView addConstraint:[NSLayoutConstraint constraintWithItem:self.weatherLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.locationLabel attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0]];
-    
-    [self.outlineView addConstraint:[NSLayoutConstraint constraintWithItem:self.weatherLabel attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:sWeatherLabelHeight]];
-}
-
-- (void)configureConstraintsForTemperatureLabel
-{
-    [self.outlineView addConstraint:[NSLayoutConstraint constraintWithItem:self.temperatureLabel attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.outlineView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:0]];
-    [self.outlineView addConstraint:[NSLayoutConstraint constraintWithItem:self.temperatureLabel attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.outlineView attribute:NSLayoutAttributeRight multiplier:1.0 constant:0]];
-    [self.outlineView addConstraint:[NSLayoutConstraint constraintWithItem:self.temperatureLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.weatherLabel attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0]];
-    
-    [self.outlineView addConstraint:[NSLayoutConstraint constraintWithItem:self.temperatureLabel attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:sTemperatureLabelHeight]];
-}
-
-- (void)configureConstraintsForTodayView
-{
-    [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.todayView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:0]];
-    [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.todayView attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeRight multiplier:1.0 constant:0]];
-    [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.todayView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeTop multiplier:1.0 constant:0]];
-    [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.todayView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:sTodayViewHeight]];
-}
-
-- (void)configureConstraintsForHourWeatherCollectionView
-{
-    [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.hourWeatherCollectionView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:0]];
-    [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.hourWeatherCollectionView attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeRight multiplier:1.0 constant:0]];
-    [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.hourWeatherCollectionView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.todayView attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0]];
-    [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.hourWeatherCollectionView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:sHourWeatherViewHeight]];
-}
-
-- (void)configureConstraintsForTableView
-{
-    [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.tableView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:0]];
-    [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.tableView attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeRight multiplier:1.0 constant:0]];
-    [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.tableView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.hourWeatherCollectionView attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0]];
-    [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.tableView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0]];
-}
-
-- (void)configureConstraintsForDayLabel
-{
-    [self.todayView addConstraint:[NSLayoutConstraint constraintWithItem:self.dayLabel attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.todayView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:sStandarPadding]];
-    [self.todayView addConstraint:[NSLayoutConstraint constraintWithItem:self.dayLabel attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.maxTemperatureLabel attribute:NSLayoutAttributeLeft multiplier:1.0 constant:-sStandarPadding]];
-    [self.todayView addConstraint:[NSLayoutConstraint constraintWithItem:self.dayLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.todayView attribute:NSLayoutAttributeTop multiplier:1.0 constant:0]];
-    [self.todayView addConstraint:[NSLayoutConstraint constraintWithItem:self.dayLabel attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.todayView attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0]];
-}
-
-- (void)configureConstraintsForMaxTemperatureLabel
-{
-    [self.todayView addConstraint:[NSLayoutConstraint constraintWithItem:self.maxTemperatureLabel attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.minTemperatureLabel attribute:NSLayoutAttributeLeft multiplier:1.0 constant:-sStandarPadding * 0.5]];
-    [self.todayView addConstraint:[NSLayoutConstraint constraintWithItem:self.maxTemperatureLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.todayView attribute:NSLayoutAttributeTop multiplier:1.0 constant:0]];
-    [self.todayView addConstraint:[NSLayoutConstraint constraintWithItem:self.maxTemperatureLabel attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.todayView attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0]];
-}
-
-- (void)configureConstraintsForMinTemperatureLabel
-{
-    [self.todayView addConstraint:[NSLayoutConstraint constraintWithItem:self.minTemperatureLabel attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.todayView attribute:NSLayoutAttributeRight multiplier:1.0 constant:-sStandarPadding]];
-    [self.todayView addConstraint:[NSLayoutConstraint constraintWithItem:self.minTemperatureLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.todayView attribute:NSLayoutAttributeTop multiplier:1.0 constant:0]];
-    [self.todayView addConstraint:[NSLayoutConstraint constraintWithItem:self.minTemperatureLabel attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.todayView attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0]];
-}
+//- (void)configureConstraintsForOutlineView
+//{
+//    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.outlineView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeLeft multiplier:1.0 constant:0]];
+//    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.outlineView attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeRight multiplier:1.0 constant:0]];
+//    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.outlineView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.topLayoutGuide attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0]];
+//
+//    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.outlineView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:sOutlineViewHeight]];
+//}
+//
+//- (void)configureConstraintsForScrollView
+//{
+//    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.scrollView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeLeft multiplier:1.0 constant:0]];
+//    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.scrollView attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeRight multiplier:1.0 constant:0]];
+//    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.scrollView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.topLayoutGuide attribute:NSLayoutAttributeBottom multiplier:1.0 constant:sCollapseOutlineViewHeight]];
+//    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.scrollView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.bottomLayoutGuide attribute:NSLayoutAttributeTop multiplier:1.0 constant:0]];
+//}
+//
+//- (void)configureConstraintsForContentView
+//{
+//    CGRect fullScreenRect = [[UIScreen mainScreen] applicationFrame];
+//
+//    [self.scrollView addConstraint:[NSLayoutConstraint constraintWithItem:self.contentView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.scrollView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:0]];
+//    [self.scrollView addConstraint:[NSLayoutConstraint constraintWithItem:self.contentView attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.scrollView attribute:NSLayoutAttributeRight multiplier:1.0 constant:0]];
+//    [self.scrollView addConstraint:[NSLayoutConstraint constraintWithItem:self.contentView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.scrollView attribute:NSLayoutAttributeTop multiplier:1.0 constant:0]];
+//    [self.scrollView addConstraint:[NSLayoutConstraint constraintWithItem:self.contentView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.scrollView attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0]];
+//
+//    [self.scrollView addConstraint:[NSLayoutConstraint constraintWithItem:self.contentView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:CGRectGetWidth(fullScreenRect)]];
+//    [self.scrollView addConstraint:[NSLayoutConstraint constraintWithItem:self.contentView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:sContentViewHeight]];
+//}
+//
+//- (void)configureConstraintsForLocationLabel
+//{
+//    [self.outlineView addConstraint:[NSLayoutConstraint constraintWithItem:self.locationLabel attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.outlineView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:0]];
+//    [self.outlineView addConstraint:[NSLayoutConstraint constraintWithItem:self.locationLabel attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.outlineView attribute:NSLayoutAttributeRight multiplier:1.0 constant:0]];
+//
+//    self.topConstraintOfLocationLabel = [NSLayoutConstraint constraintWithItem:self.locationLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.outlineView attribute:NSLayoutAttributeTop multiplier:1.0 constant:sMaxTopPaddingOfLocationLabel];
+//
+//    [self.outlineView addConstraint:self.topConstraintOfLocationLabel];
+//
+//    [self.outlineView addConstraint:[NSLayoutConstraint constraintWithItem:self.locationLabel attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:sLocationLabelHeight]];
+//}
+//
+//- (void)configureConstraintsForWeatherLabel
+//{
+//    [self.outlineView addConstraint:[NSLayoutConstraint constraintWithItem:self.weatherLabel attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.outlineView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:0]];
+//    [self.outlineView addConstraint:[NSLayoutConstraint constraintWithItem:self.weatherLabel attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.outlineView attribute:NSLayoutAttributeRight multiplier:1.0 constant:0]];
+//    [self.outlineView addConstraint:[NSLayoutConstraint constraintWithItem:self.weatherLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.locationLabel attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0]];
+//
+//    [self.outlineView addConstraint:[NSLayoutConstraint constraintWithItem:self.weatherLabel attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:sWeatherLabelHeight]];
+//}
+//
+//- (void)configureConstraintsForTemperatureLabel
+//{
+//    [self.outlineView addConstraint:[NSLayoutConstraint constraintWithItem:self.temperatureLabel attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.outlineView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:0]];
+//    [self.outlineView addConstraint:[NSLayoutConstraint constraintWithItem:self.temperatureLabel attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.outlineView attribute:NSLayoutAttributeRight multiplier:1.0 constant:0]];
+//    [self.outlineView addConstraint:[NSLayoutConstraint constraintWithItem:self.temperatureLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.weatherLabel attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0]];
+//
+//    [self.outlineView addConstraint:[NSLayoutConstraint constraintWithItem:self.temperatureLabel attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:sTemperatureLabelHeight]];
+//}
+//
+//- (void)configureConstraintsForTodayView
+//{
+//    [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.todayView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:0]];
+//    [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.todayView attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeRight multiplier:1.0 constant:0]];
+//    [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.todayView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeTop multiplier:1.0 constant:0]];
+//    [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.todayView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:sTodayViewHeight]];
+//}
+//
+//- (void)configureConstraintsForHourWeatherCollectionView
+//{
+//    [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.hourWeatherCollectionView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:0]];
+//    [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.hourWeatherCollectionView attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeRight multiplier:1.0 constant:0]];
+//    [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.hourWeatherCollectionView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.todayView attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0]];
+//    [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.hourWeatherCollectionView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:sHourWeatherViewHeight]];
+//}
+//
+//- (void)configureConstraintsForTableView
+//{
+//    [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.tableView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:0]];
+//    [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.tableView attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeRight multiplier:1.0 constant:0]];
+//    [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.tableView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.hourWeatherCollectionView attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0]];
+//    [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.tableView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0]];
+//}
+//
+//- (void)configureConstraintsForDayLabel
+//{
+//    [self.todayView addConstraint:[NSLayoutConstraint constraintWithItem:self.dayLabel attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.todayView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:sStandarPadding]];
+//    [self.todayView addConstraint:[NSLayoutConstraint constraintWithItem:self.dayLabel attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.maxTemperatureLabel attribute:NSLayoutAttributeLeft multiplier:1.0 constant:-sStandarPadding]];
+//    [self.todayView addConstraint:[NSLayoutConstraint constraintWithItem:self.dayLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.todayView attribute:NSLayoutAttributeTop multiplier:1.0 constant:0]];
+//    [self.todayView addConstraint:[NSLayoutConstraint constraintWithItem:self.dayLabel attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.todayView attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0]];
+//}
+//
+//- (void)configureConstraintsForMaxTemperatureLabel
+//{
+//    [self.todayView addConstraint:[NSLayoutConstraint constraintWithItem:self.maxTemperatureLabel attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.minTemperatureLabel attribute:NSLayoutAttributeLeft multiplier:1.0 constant:-sStandarPadding * 0.5]];
+//    [self.todayView addConstraint:[NSLayoutConstraint constraintWithItem:self.maxTemperatureLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.todayView attribute:NSLayoutAttributeTop multiplier:1.0 constant:0]];
+//    [self.todayView addConstraint:[NSLayoutConstraint constraintWithItem:self.maxTemperatureLabel attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.todayView attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0]];
+//}
+//
+//- (void)configureConstraintsForMinTemperatureLabel
+//{
+//    [self.todayView addConstraint:[NSLayoutConstraint constraintWithItem:self.minTemperatureLabel attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.todayView attribute:NSLayoutAttributeRight multiplier:1.0 constant:-sStandarPadding]];
+//    [self.todayView addConstraint:[NSLayoutConstraint constraintWithItem:self.minTemperatureLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.todayView attribute:NSLayoutAttributeTop multiplier:1.0 constant:0]];
+//    [self.todayView addConstraint:[NSLayoutConstraint constraintWithItem:self.minTemperatureLabel attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.todayView attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0]];
+//}
 
 - (void)configureConstraintsForToolbar
 {
@@ -733,176 +916,191 @@ static NSString *const sWeatherIconBaseURLString = @"http://openweathermap.org/i
     [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.toolbar attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.bottomLayoutGuide attribute:NSLayoutAttributeTop multiplier:1.0 constant:0]];
 }
 
-- (void)configureConstraintsForUpperHairLineView
-{
-    [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.upperHairLineView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:0]];
-    [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.upperHairLineView attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeRight multiplier:1.0 constant:0]];
-    [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.upperHairLineView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.todayView attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0]];
-    [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.upperHairLineView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:1]];
-}
+//- (void)configureConstraintsForUpperHairLineView
+//{
+//    [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.upperHairLineView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:0]];
+//    [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.upperHairLineView attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeRight multiplier:1.0 constant:0]];
+//    [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.upperHairLineView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.todayView attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0]];
+//    [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.upperHairLineView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:1]];
+//}
 
-- (void)configureConstraintsForLowerHairLineView
-{
-    [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.lowerHairLineView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:0]];
-    [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.lowerHairLineView attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeRight multiplier:1.0 constant:0]];
-    [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.lowerHairLineView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.hourWeatherCollectionView attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0]];
-    [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.lowerHairLineView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:1]];
-}
+//- (void)configureConstraintsForLowerHairLineView
+//{
+//    [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.lowerHairLineView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:0]];
+//    [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.lowerHairLineView attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeRight multiplier:1.0 constant:0]];
+//    [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.lowerHairLineView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.hourWeatherCollectionView attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0]];
+//    [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.lowerHairLineView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:1]];
+//}
 
 #pragma mark - Getters
 
-- (UIScrollView *)scrollView
+- (UICollectionView *)collectionView
 {
-    if (!_scrollView) {
-        _scrollView = [[UIScrollView alloc] initWithFrame:CGRectZero];
-        [_scrollView setTranslatesAutoresizingMaskIntoConstraints:NO];
-        _scrollView.contentInset = UIEdgeInsetsMake(sOutlineViewHeight - sCollapseOutlineViewHeight, 0, 44.0, 0);
-        _scrollView.showsVerticalScrollIndicator = NO;
-        _scrollView.delegate = self;
-    }
-    return _scrollView;
-}
+    if (!_collectionView) {
+        DMLCollectionViewHandOffLayout *handOffLayout = [DMLCollectionViewHandOffLayout new];
 
-- (UIView *)contentView
-{
-    if (!_contentView) {
-        _contentView = [[UIView alloc] initWithFrame:CGRectZero];
-        [_contentView setTranslatesAutoresizingMaskIntoConstraints:NO];
-    }
-    return _contentView;
-}
-
-- (UIView *)outlineView
-{
-    if (!_outlineView) {
-        _outlineView = [[UIView alloc] initWithFrame:CGRectZero];
-        [_outlineView setTranslatesAutoresizingMaskIntoConstraints:NO];
-    }
-    return _outlineView;
-}
-
-- (UILabel *)locationLabel
-{
-    if (!_locationLabel) {
-        _locationLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-        [_locationLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
-        _locationLabel.textColor = [UIColor whiteColor];
-        _locationLabel.textAlignment = NSTextAlignmentCenter;
-        _locationLabel.font = [UIFont systemFontOfSize:22];
-        _locationLabel.text = @"--";
-    }
-    return _locationLabel;
-}
-
-- (UILabel *)weatherLabel
-{
-    if (!_weatherLabel) {
-        _weatherLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-        [_weatherLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
-        _weatherLabel.textColor = [UIColor whiteColor];
-        _weatherLabel.textAlignment = NSTextAlignmentCenter;
-        _weatherLabel.font = [UIFont systemFontOfSize:16];
-        _weatherLabel.text = @"--";
-    }
-    return _weatherLabel;
-}
-
-- (UILabel *)temperatureLabel
-{
-    if (!_temperatureLabel) {
-        _temperatureLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-        [_temperatureLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
-        _temperatureLabel.textColor = [UIColor whiteColor];
-        _temperatureLabel.textAlignment = NSTextAlignmentCenter;
-        _temperatureLabel.font = [UIFont fontWithName:@"PingFangSC-Thin" size:72];
-        _temperatureLabel.text = @"--";
-    }
-    return _temperatureLabel;
-}
-
-- (UIView *)todayView
-{
-    if (!_todayView) {
-        _todayView = [[UIView alloc] initWithFrame:CGRectZero];
-        [_todayView setTranslatesAutoresizingMaskIntoConstraints:NO];
-    }
-    return _todayView;
-}
-
-- (UICollectionView *)hourWeatherCollectionView
-{
-    if (!_hourWeatherCollectionView) {
-        UICollectionViewFlowLayout *flowLayout = [UICollectionViewFlowLayout new];
-        flowLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
+        _collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:handOffLayout];
+        _collectionView.dataSource = self;
+        _collectionView.delegate = self;
         
-        _hourWeatherCollectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:flowLayout];
-
-        [_hourWeatherCollectionView setTranslatesAutoresizingMaskIntoConstraints:NO];
-        _hourWeatherCollectionView.backgroundColor = [UIColor clearColor];
-        _hourWeatherCollectionView.showsHorizontalScrollIndicator = NO;
-        
-        [_hourWeatherCollectionView registerClass:[DMLWeatherCollectionCell class] forCellWithReuseIdentifier:sWeatherCollectionCellIdentifier];
-        
-        _hourWeatherCollectionView.dataSource = self;
-        _hourWeatherCollectionView.delegate = self;
+        _collectionView.translatesAutoresizingMaskIntoConstraints = NO;
+        _collectionView.backgroundColor = [UIColor clearColor];
     }
-    return _hourWeatherCollectionView;
+    return _collectionView;
 }
 
-- (UITableView *)tableView
-{
-    if (!_tableView) {
-        _tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
-        [_tableView setTranslatesAutoresizingMaskIntoConstraints:NO];
-        _tableView.tableFooterView = [UIView new];
-        _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-        _tableView.backgroundColor = [UIColor clearColor];
-        _tableView.allowsSelection = NO;
-        [_tableView registerClass:[DMLWeatherTableCell class] forCellReuseIdentifier:sWeatherTableCellIdentifier];
-        [_tableView registerClass:[DMLSubtitleTableCell class] forCellReuseIdentifier:sSubtitleTableCellIdentifier];
-        _tableView.dataSource = self;
-        _tableView.delegate = self;
-    }
-    return _tableView;
-}
-
-- (UILabel *)dayLabel
-{
-    if (!_dayLabel) {
-        _dayLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-        [_dayLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
-        _dayLabel.textAlignment = NSTextAlignmentLeft;
-        _dayLabel.textColor = [UIColor whiteColor];
-        _dayLabel.text = [NSString stringWithFormat:@"%@ Today", [self.dateFormatter stringFromDate:[NSDate date]]];
-        
-        [_dayLabel setContentHuggingPriority:UILayoutPriorityDefaultLow - 1 forAxis:UILayoutConstraintAxisHorizontal];
-    }
-    return _dayLabel;
-}
-
-- (UILabel *)maxTemperatureLabel
-{
-    if (!_maxTemperatureLabel) {
-        _maxTemperatureLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-        [_maxTemperatureLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
-        _maxTemperatureLabel.textAlignment = NSTextAlignmentRight;
-        _maxTemperatureLabel.textColor = [UIColor whiteColor];
-        _maxTemperatureLabel.text = @"-";
-    }
-    return _maxTemperatureLabel;
-}
-
-- (UILabel *)minTemperatureLabel
-{
-    if (!_minTemperatureLabel) {
-        _minTemperatureLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-        [_minTemperatureLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
-        _minTemperatureLabel.textAlignment = NSTextAlignmentRight;
-        _minTemperatureLabel.textColor = [UIColor whiteColor];
-        _minTemperatureLabel.text = @"-";
-    }
-    return _minTemperatureLabel;
-}
+//- (UIScrollView *)scrollView
+//{
+//    if (!_scrollView) {
+//        _scrollView = [[UIScrollView alloc] initWithFrame:CGRectZero];
+//        [_scrollView setTranslatesAutoresizingMaskIntoConstraints:NO];
+//        _scrollView.contentInset = UIEdgeInsetsMake(sOutlineViewHeight - sCollapseOutlineViewHeight, 0, 44.0, 0);
+//        _scrollView.showsVerticalScrollIndicator = NO;
+//        _scrollView.delegate = self;
+//    }
+//    return _scrollView;
+//}
+//
+//- (UIView *)contentView
+//{
+//    if (!_contentView) {
+//        _contentView = [[UIView alloc] initWithFrame:CGRectZero];
+//        [_contentView setTranslatesAutoresizingMaskIntoConstraints:NO];
+//    }
+//    return _contentView;
+//}
+//
+//- (UIView *)outlineView
+//{
+//    if (!_outlineView) {
+//        _outlineView = [[UIView alloc] initWithFrame:CGRectZero];
+//        [_outlineView setTranslatesAutoresizingMaskIntoConstraints:NO];
+//    }
+//    return _outlineView;
+//}
+//
+//- (UILabel *)locationLabel
+//{
+//    if (!_locationLabel) {
+//        _locationLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+//        [_locationLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
+//        _locationLabel.textColor = [UIColor whiteColor];
+//        _locationLabel.textAlignment = NSTextAlignmentCenter;
+//        _locationLabel.font = [UIFont systemFontOfSize:22];
+//        _locationLabel.text = @"--";
+//    }
+//    return _locationLabel;
+//}
+//
+//- (UILabel *)weatherLabel
+//{
+//    if (!_weatherLabel) {
+//        _weatherLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+//        [_weatherLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
+//        _weatherLabel.textColor = [UIColor whiteColor];
+//        _weatherLabel.textAlignment = NSTextAlignmentCenter;
+//        _weatherLabel.font = [UIFont systemFontOfSize:16];
+//        _weatherLabel.text = @"--";
+//    }
+//    return _weatherLabel;
+//}
+//
+//- (UILabel *)temperatureLabel
+//{
+//    if (!_temperatureLabel) {
+//        _temperatureLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+//        [_temperatureLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
+//        _temperatureLabel.textColor = [UIColor whiteColor];
+//        _temperatureLabel.textAlignment = NSTextAlignmentCenter;
+//        _temperatureLabel.font = [UIFont fontWithName:@"PingFangSC-Thin" size:72];
+//        _temperatureLabel.text = @"--";
+//    }
+//    return _temperatureLabel;
+//}
+//
+//- (UIView *)todayView
+//{
+//    if (!_todayView) {
+//        _todayView = [[UIView alloc] initWithFrame:CGRectZero];
+//        [_todayView setTranslatesAutoresizingMaskIntoConstraints:NO];
+//    }
+//    return _todayView;
+//}
+//
+//- (UICollectionView *)hourWeatherCollectionView
+//{
+//    if (!_hourWeatherCollectionView) {
+//        UICollectionViewFlowLayout *flowLayout = [UICollectionViewFlowLayout new];
+//        flowLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
+//
+//        _hourWeatherCollectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:flowLayout];
+//
+//        [_hourWeatherCollectionView setTranslatesAutoresizingMaskIntoConstraints:NO];
+//        _hourWeatherCollectionView.backgroundColor = [UIColor clearColor];
+//        _hourWeatherCollectionView.showsHorizontalScrollIndicator = NO;
+//
+//        [_hourWeatherCollectionView registerClass:[DMLWeatherCollectionCell class] forCellWithReuseIdentifier:sWeatherCollectionCellIdentifier];
+//
+//        _hourWeatherCollectionView.dataSource = self;
+//        _hourWeatherCollectionView.delegate = self;
+//    }
+//    return _hourWeatherCollectionView;
+//}
+//
+//- (UITableView *)tableView
+//{
+//    if (!_tableView) {
+//        _tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
+//        [_tableView setTranslatesAutoresizingMaskIntoConstraints:NO];
+//        _tableView.tableFooterView = [UIView new];
+//        _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+//        _tableView.backgroundColor = [UIColor clearColor];
+//        _tableView.allowsSelection = NO;
+//        [_tableView registerClass:[DMLWeatherTableCell class] forCellReuseIdentifier:sWeatherTableCellIdentifier];
+//        [_tableView registerClass:[DMLSubtitleTableCell class] forCellReuseIdentifier:sSubtitleTableCellIdentifier];
+//        _tableView.dataSource = self;
+//        _tableView.delegate = self;
+//    }
+//    return _tableView;
+//}
+//
+//- (UILabel *)dayLabel
+//{
+//    if (!_dayLabel) {
+//        _dayLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+//        [_dayLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
+//        _dayLabel.textAlignment = NSTextAlignmentLeft;
+//        _dayLabel.textColor = [UIColor whiteColor];
+//        _dayLabel.text = [NSString stringWithFormat:@"%@ Today", [self.dateFormatter stringFromDate:[NSDate date]]];
+//
+//        [_dayLabel setContentHuggingPriority:UILayoutPriorityDefaultLow - 1 forAxis:UILayoutConstraintAxisHorizontal];
+//    }
+//    return _dayLabel;
+//}
+//
+//- (UILabel *)maxTemperatureLabel
+//{
+//    if (!_maxTemperatureLabel) {
+//        _maxTemperatureLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+//        [_maxTemperatureLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
+//        _maxTemperatureLabel.textAlignment = NSTextAlignmentRight;
+//        _maxTemperatureLabel.textColor = [UIColor whiteColor];
+//        _maxTemperatureLabel.text = @"-";
+//    }
+//    return _maxTemperatureLabel;
+//}
+//
+//- (UILabel *)minTemperatureLabel
+//{
+//    if (!_minTemperatureLabel) {
+//        _minTemperatureLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+//        [_minTemperatureLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
+//        _minTemperatureLabel.textAlignment = NSTextAlignmentRight;
+//        _minTemperatureLabel.textColor = [UIColor whiteColor];
+//        _minTemperatureLabel.text = @"-";
+//    }
+//    return _minTemperatureLabel;
+//}
 
 - (UIToolbar *)toolbar
 {
@@ -926,23 +1124,23 @@ static NSString *const sWeatherIconBaseURLString = @"http://openweathermap.org/i
     return _toolbar;
 }
 
-- (DMLHairLineDecorateView *)upperHairLineView
-{
-    if (!_upperHairLineView) {
-        _upperHairLineView = [[DMLHairLineDecorateView alloc] initWithFrame:CGRectZero];
-        [_upperHairLineView setTranslatesAutoresizingMaskIntoConstraints:NO];
-    }
-    return _upperHairLineView;
-}
-
-- (DMLHairLineDecorateView *)lowerHairLineView
-{
-    if (!_lowerHairLineView) {
-        _lowerHairLineView = [[DMLHairLineDecorateView alloc] initWithFrame:CGRectZero];
-        [_lowerHairLineView setTranslatesAutoresizingMaskIntoConstraints:NO];
-    }
-    return _lowerHairLineView;
-}
+//- (DMLHairLineDecorateView *)upperHairLineView
+//{
+//    if (!_upperHairLineView) {
+//        _upperHairLineView = [[DMLHairLineDecorateView alloc] initWithFrame:CGRectZero];
+//        [_upperHairLineView setTranslatesAutoresizingMaskIntoConstraints:NO];
+//    }
+//    return _upperHairLineView;
+//}
+//
+//- (DMLHairLineDecorateView *)lowerHairLineView
+//{
+//    if (!_lowerHairLineView) {
+//        _lowerHairLineView = [[DMLHairLineDecorateView alloc] initWithFrame:CGRectZero];
+//        [_lowerHairLineView setTranslatesAutoresizingMaskIntoConstraints:NO];
+//    }
+//    return _lowerHairLineView;
+//}
 
 - (DMLCurrentWeatherAPIManager *)currentWeatherAPIManager
 {
@@ -984,23 +1182,23 @@ static NSString *const sWeatherIconBaseURLString = @"http://openweathermap.org/i
     return _locationManager;
 }
 
-- (NSDateFormatter *)dateFormatter
-{
-    if (!_dateFormatter) {
-        _dateFormatter = [[NSDateFormatter alloc] init];
-        _dateFormatter.dateFormat = @"EEEE";
-    }
-    return _dateFormatter;
-}
-
-- (NSDateFormatter *)hourDateFormatter
-{
-    if (!_hourDateFormatter) {
-        _hourDateFormatter = [[NSDateFormatter alloc] init];
-        _hourDateFormatter.dateFormat = @"HH";
-    }
-    return _hourDateFormatter;
-}
+//- (NSDateFormatter *)dateFormatter
+//{
+//    if (!_dateFormatter) {
+//        _dateFormatter = [[NSDateFormatter alloc] init];
+//        _dateFormatter.dateFormat = @"EEEE";
+//    }
+//    return _dateFormatter;
+//}
+//
+//- (NSDateFormatter *)hourDateFormatter
+//{
+//    if (!_hourDateFormatter) {
+//        _hourDateFormatter = [[NSDateFormatter alloc] init];
+//        _hourDateFormatter.dateFormat = @"HH";
+//    }
+//    return _hourDateFormatter;
+//}
 
 - (NSDateFormatter *)hhmmDateFormatter
 {

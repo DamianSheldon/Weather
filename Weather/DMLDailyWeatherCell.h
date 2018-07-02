@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface DMLWeatherTableCell : UITableViewCell
+@interface DMLDailyWeatherCell : UICollectionViewCell
 
 @property (nonatomic, readonly) UILabel *dayLabel;
 @property (nonatomic, readonly) UIImageView *weatherImageView;

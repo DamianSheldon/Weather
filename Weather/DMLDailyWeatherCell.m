@@ -6,11 +6,11 @@
 //  Copyright © 2016 Meiliang Dong. All rights reserved.
 //
 
-#import "DMLWeatherTableCell.h"
+#import "DMLDailyWeatherCell.h"
 
 static const CGFloat sPadding = 20.0;
 
-@interface DMLWeatherTableCell ()
+@interface DMLDailyWeatherCell ()
 
 @property (nonatomic) UILabel *dayLabel;
 @property (nonatomic) UIImageView *weatherImageView;
@@ -19,11 +19,11 @@ static const CGFloat sPadding = 20.0;
 
 @end
 
-@implementation DMLWeatherTableCell
+@implementation DMLDailyWeatherCell
 
-- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
+- (instancetype)initWithFrame:(CGRect)frame
 {
-    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
+    self = [super initWithFrame:frame];
     if (self) {
         self.backgroundColor = [UIColor clearColor];
 
