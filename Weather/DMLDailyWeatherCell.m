@@ -106,6 +106,8 @@ static const CGFloat sPadding = 20.0;
     [_minTemperatureLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
     
     [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:_minTemperatureLabel attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeRight multiplier:1.0 constant:-sPadding]];
+    [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:_minTemperatureLabel attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:2*sPadding]];
+    
     [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:_minTemperatureLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeTop multiplier:1.0 constant:0]];
     [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:_minTemperatureLabel attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0]];
 }
