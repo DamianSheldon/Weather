@@ -9,11 +9,16 @@
 #import "DMLHeader.h"
 #import "DMLCollectionViewHandOffLayoutAttributes.h"
 
+static CGFloat const sMaxTopMargin = 40.0;
+static CGFloat const sMinTopMargin = 10.0;
+
 @interface DMLHeader ()
 
 @property (nonatomic) UILabel *locationLabel;
 @property (nonatomic) UILabel *weatherLabel;
 @property (nonatomic) UILabel *temperatureLabel;
+
+@property (nonatomic) NSLayoutConstraint *locationLabelTopConstraint;
 
 @end
 
@@ -49,7 +54,8 @@
         
         // Configure constraints
         [self addConstraint:[NSLayoutConstraint constraintWithItem:_locationLabel attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0]];
-        [self addConstraint:[NSLayoutConstraint constraintWithItem:_locationLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeTop multiplier:1.0 constant:40.0]];
+        _locationLabelTopConstraint = [NSLayoutConstraint constraintWithItem:_locationLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeTop multiplier:1.0 constant:sMaxTopMargin];
+        [self addConstraint:_locationLabelTopConstraint];
         
         [self addConstraint:[NSLayoutConstraint constraintWithItem:_weatherLabel attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0]];
         [self addConstraint:[NSLayoutConstraint constraintWithItem:_weatherLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:_locationLabel attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0]];
@@ -64,11 +70,12 @@
 {
     [super applyLayoutAttributes:layoutAttributes];
     
-//    self.backgroundColor = [UIColor brownColor];
-    
     DMLCollectionViewHandOffLayoutAttributes *attributes = (DMLCollectionViewHandOffLayoutAttributes *)layoutAttributes;
     
     self.temperatureLabel.alpha = attributes.overlayAlpha;
+    
+    self.locationLabelTopConstraint.constant = sMinTopMargin + attributes.overlayAlpha * (sMaxTopMargin - sMinTopMargin);
+    [self setNeedsUpdateConstraints];
 }
 
 //- (void)prepareForReuse
