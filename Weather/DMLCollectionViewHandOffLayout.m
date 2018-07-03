@@ -112,10 +112,12 @@ static NSString * const sElementCellKey = @"Cell";
     }
     
     // Cell
+    CGFloat yLimit = self.minHeaderHeight + self.menuSize.height;
+    
     id<UICollectionViewDataSource> dataSource = self.collectionView.dataSource;
     
     NSInteger sections = [dataSource numberOfSectionsInCollectionView:self.collectionView];
-    
+
     for (NSInteger i = 0; i < sections; i++) {
         NSInteger rows = [dataSource collectionView:self.collectionView numberOfItemsInSection:i];
         
@@ -129,13 +131,11 @@ static NSString * const sElementCellKey = @"Cell";
             attributes.zIndex = self.zIndex;
             
             // Set alpha according to contentOffset
-            if (!i) {
-                if (yOffset > hMax + 0.3 * cellSize.height + j * cellSize.height) {
-                    attributes.overlayAlpha = 0;
-                }
-                else {
-                    attributes.overlayAlpha = 1.0;
-                }
+            if (yOffset > self.contentHeight - yLimit) {
+                attributes.overlayAlpha = 0;
+            }
+            else {
+                attributes.overlayAlpha = 1.0;
             }
             
             self.cache[sElementCellKey][cellIndexPath] = attributes;

@@ -7,6 +7,7 @@
 //
 
 #import "DMLDetailWeatherCell.h"
+#import "DMLCollectionViewHandOffLayoutAttributes.h"
 
 static const CGFloat sPadding = 20.0;
 
@@ -78,6 +79,20 @@ static const CGFloat sPadding = 20.0;
     self.rightValueLabel.text = nil;
     
     self.separatorLineView.hidden = NO;
+}
+
+- (void)applyLayoutAttributes:(UICollectionViewLayoutAttributes *)layoutAttributes
+{
+    [super applyLayoutAttributes:layoutAttributes];
+    
+    DMLCollectionViewHandOffLayoutAttributes *attributes = (DMLCollectionViewHandOffLayoutAttributes *)layoutAttributes;
+    self.leftTitleLabel.alpha = attributes.overlayAlpha;
+    self.leftValueLabel.alpha = attributes.overlayAlpha;
+    
+    self.rightTitleLabel.alpha = attributes.overlayAlpha;
+    self.rightValueLabel.alpha = attributes.overlayAlpha;
+    
+    self.separatorLineView.alpha = attributes.overlayAlpha;
 }
 
 #pragma mark - Private Methods

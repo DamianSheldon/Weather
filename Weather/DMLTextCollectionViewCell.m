@@ -7,6 +7,7 @@
 //
 
 #import "DMLTextCollectionViewCell.h"
+#import "DMLCollectionViewHandOffLayoutAttributes.h"
 
 static CGFloat const sMargin = 20.0;
 
@@ -58,6 +59,17 @@ static CGFloat const sMargin = 20.0;
         [self addConstraint:[NSLayoutConstraint constraintWithItem:_bottomHairLineView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:0.5]];
     }
     return self;
+}
+
+- (void)applyLayoutAttributes:(UICollectionViewLayoutAttributes *)layoutAttributes
+{
+    [super applyLayoutAttributes:layoutAttributes];
+    
+    DMLCollectionViewHandOffLayoutAttributes *attributes = (DMLCollectionViewHandOffLayoutAttributes *)layoutAttributes;
+    self.textView.alpha = attributes.overlayAlpha;
+    
+    self.topHairLineView.alpha = attributes.overlayAlpha;
+    self.bottomHairLineView.alpha = attributes.overlayAlpha;
 }
 
 @end
