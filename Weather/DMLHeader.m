@@ -78,12 +78,6 @@ static CGFloat const sMinTopMargin = 10.0;
     [self setNeedsUpdateConstraints];
 }
 
-//- (void)prepareForReuse
-//{
-//    [super prepareForReuse];
-//
-//}
-
 - (void)configureWithDict:(NSDictionary *)dict
 {
     NSArray *weathers = dict[@"weather"];

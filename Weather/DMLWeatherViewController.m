@@ -171,48 +171,6 @@ static NSString *const sWeatherIconBaseURLString = @"http://openweathermap.org/i
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
 }
 
-#pragma mark - UIScrollViewDelegate
-
-//- (void)scrollViewDidScroll:(UIScrollView *)scrollView
-//{
-////    NSLog(@"%s\n", __PRETTY_FUNCTION__);
-//
-//    CGFloat yOffset = scrollView.contentOffset.y;
-//
-//    if (scrollView == self.scrollView) {
-//        CGFloat yIntentset = sOutlineViewHeight - sCollapseOutlineViewHeight;
-//
-//        if (yOffset > sDistanceAffectAlpha - yIntentset) {
-//            self.temperatureLabel.alpha = 0.0;
-//        }
-//        else if (yOffset < -yIntentset) {
-//            self.temperatureLabel.alpha = 1.0;
-//        }
-//        else {
-//            // 1 / sDistanceAffectAlpha * distance = 1 / 50 * (yIntentset - sDistanceAffectAlpha + yOffset) = 0.02 * (yIntentset - sDistanceAffectAlpha + yOffset)
-//            self.temperatureLabel.alpha = -0.02 * (yIntentset - sDistanceAffectAlpha + yOffset);
-////            NSLog(@"Alpha:%.2f\n", self.temperatureLabel.alpha);
-//        }
-//
-//        // Sync today view's alpha with temperature label
-//        self.todayView.alpha = self.temperatureLabel.alpha;
-//
-//        // Animate location label
-//        if (yOffset > 0) {
-//            self.topConstraintOfLocationLabel.constant = 0;
-//        }
-//        else if (yOffset < -(yIntentset - sDistanceAffectAlpha)) {
-//            self.topConstraintOfLocationLabel.constant = sMaxTopPaddingOfLocationLabel;
-//        }
-//        else {
-//            // sMaxTopPaddingOfLocationLabel / 125 * yOffset = 30 / 125 * yOffset = 0.24 * yOffset
-//            self.topConstraintOfLocationLabel.constant = -0.24 * yOffset;
-//        }
-//
-//        [self.outlineView setNeedsUpdateConstraints];
-//    }
-//}
-
 #pragma mark - UICollectionViewDataSource
 
 static NSInteger const sWeatherInfoSections = 3;

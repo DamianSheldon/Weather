@@ -10,6 +10,7 @@
 
 #import "DMLMenu.h"
 #import "DMLWeatherCollectionCell.h"
+#import "DMLCollectionViewHandOffLayoutAttributes.h"
 
 static NSString *const sWeatherCollectionCellIdentifier = @"sWeatherCollectionCellIdentifier";
 static NSString *const sWeatherIconBaseURLString = @"http://openweathermap.org/img/w/";
@@ -131,7 +132,11 @@ static const CGFloat sStandarPadding = 20.0;
 {
     [super applyLayoutAttributes:layoutAttributes];
     
-//    self.backgroundColor = [UIColor purpleColor];
+    DMLCollectionViewHandOffLayoutAttributes *attributes = (DMLCollectionViewHandOffLayoutAttributes *)layoutAttributes;
+    
+    self.dayLabel.alpha = attributes.overlayAlpha;
+    self.maxTemperatureLabel.alpha = attributes.overlayAlpha;
+    self.minTemperatureLabel.alpha = attributes.overlayAlpha;
 }
 
 - (nonnull __kindof UICollectionViewCell *)collectionView:(nonnull UICollectionView *)collectionView cellForItemAtIndexPath:(nonnull NSIndexPath *)indexPath {

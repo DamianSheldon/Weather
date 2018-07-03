@@ -229,26 +229,26 @@ static NSString * const sElementCellKey = @"Cell";
 - (void)updateSupplementaryViewWithKey:(NSString *)key attributes:(DMLCollectionViewHandOffLayoutAttributes *)attributes collectionView:(UICollectionView *)cv indexPath:(NSIndexPath *)indexPath
 {
     if ([key isEqualToString:sElementHeaderKey]) {
-//        CGFloat updatedHeight = MIN(CGRectGetHeight(cv.frame), MAX(self.headerSize.height, self.headerSize.height - cv.contentOffset.y));
-//        CGFloat delta = (updatedHeight - self.headerSize.height) / 2;
-//
-//        attributes.transform = CGAffineTransformMakeTranslation(0, MIN(cv.contentOffset.y, self.headerSize.height) + delta);
-//
-//        attributes.headerOverlayAlpha = MIN(self.headerOverlayMaxAlphaValue, cv.contentOffset.y / self.headerSize.height);
         CGFloat ty = MAX(0, cv.contentOffset.y);
         attributes.transform = CGAffineTransformMakeTranslation(0, ty);
-        
+
         CGFloat distanceAffectAlpha = MIN(self.minHeaderHeight, ty);
         CGFloat alpha = self.headerOverlayMaxAlphaValue - distanceAffectAlpha/self.minHeaderHeight;
-        
+
         attributes.overlayAlpha = alpha;
     }
     
     if ([key isEqualToString:sElementMenuKey]) {
         CGFloat ty = MAX(attributes.initialOrigin.y - self.minHeaderHeight, cv.contentOffset.y) - self.headerSize.height + self.minHeaderHeight;
         
-//        NSLog(@"cv.y:%.2f ty:%.2f\n", cv.bounds.origin.y, ty);
         attributes.transform = CGAffineTransformMakeTranslation(0, ty);
+        
+        CGFloat yDelta = MAX(0, cv.contentOffset.y);
+        
+        CGFloat distanceAffectAlpha = MIN(self.minHeaderHeight, yDelta);
+        CGFloat alpha = self.headerOverlayMaxAlphaValue - distanceAffectAlpha/self.minHeaderHeight;
+        
+        attributes.overlayAlpha = alpha;
     }
 }
 
