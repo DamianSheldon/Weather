@@ -287,6 +287,9 @@ static NSInteger const sWeatherDetailInfoEntries = 6;
         if (self.currentWeatherDict) {
             [menu configureTemperatureWithDict:self.currentWeatherDict];
         }
+        if (self.listOfHourWeather) {
+            [menu updateWithNewDataSource:self.listOfHourWeather];
+        }
         return menu;
     }
     
@@ -425,8 +428,7 @@ static CGFloat const sWeatherDetailInfoCellHeight = 52.0;
         if ([listOfHourWeather isKindOfClass:[NSArray class]]) {
             self.listOfHourWeather = listOfHourWeather;
             
-            DMLMenu *menu = (DMLMenu *)[self.collectionView supplementaryViewForElementKind:[DMLCollectionViewHandOffLayout kindOfElement:DMLHandOffLayoutElementMenu] atIndexPath:[NSIndexPath indexPathForItem:0 inSection:0]];
-            [menu updateWithNewDataSource:listOfHourWeather];
+            [self.collectionView reloadSections:[NSIndexSet indexSetWithIndex:0]];
         }
     }
     
