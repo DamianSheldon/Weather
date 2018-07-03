@@ -534,6 +534,7 @@ static CGFloat const sWeatherDetailInfoCellHeight = 52.0;
         
         _collectionView.translatesAutoresizingMaskIntoConstraints = NO;
         _collectionView.backgroundColor = [UIColor clearColor];
+        _collectionView.showsVerticalScrollIndicator = NO;
     }
     return _collectionView;
 }
