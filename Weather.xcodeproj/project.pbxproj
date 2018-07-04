@@ -28,7 +28,6 @@
 		589D21651DC1EF1E00CA0905 /* DMLDailyWeatherCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 589D21641DC1EF1E00CA0905 /* DMLDailyWeatherCell.m */; };
 		589D21681DC1FB8900CA0905 /* DMLDetailWeatherCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 589D21671DC1FB8900CA0905 /* DMLDetailWeatherCell.m */; };
 		589D216B1DC73D1800CA0905 /* UIImage+DMLAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 589D216A1DC73D1800CA0905 /* UIImage+DMLAdditions.m */; };
-		589D216E1DC741FD00CA0905 /* DMLHairLineDecorateView.m in Sources */ = {isa = PBXBuildFile; fileRef = 589D216D1DC741FD00CA0905 /* DMLHairLineDecorateView.m */; };
 		58B789441DDC0D1F007765BB /* DMLDailyForecastAPIManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 58B789431DDC0D1F007765BB /* DMLDailyForecastAPIManager.m */; };
 		C898457BF91748BB0C40EB4B /* libPods-Weather.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 58A74B5025065885531FB46C /* libPods-Weather.a */; };
 		E48C0E3B1B3CA92268B6A03B /* libPods-WeatherTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E8970B8E5EDFFCA0960983F /* libPods-WeatherTests.a */; };
@@ -90,8 +89,6 @@
 		589D21671DC1FB8900CA0905 /* DMLDetailWeatherCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DMLDetailWeatherCell.m; sourceTree = "<group>"; };
 		589D21691DC73D1800CA0905 /* UIImage+DMLAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+DMLAdditions.h"; sourceTree = "<group>"; };
 		589D216A1DC73D1800CA0905 /* UIImage+DMLAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+DMLAdditions.m"; sourceTree = "<group>"; };
-		589D216C1DC741FD00CA0905 /* DMLHairLineDecorateView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DMLHairLineDecorateView.h; sourceTree = "<group>"; };
-		589D216D1DC741FD00CA0905 /* DMLHairLineDecorateView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DMLHairLineDecorateView.m; sourceTree = "<group>"; };
 		58A74B5025065885531FB46C /* libPods-Weather.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Weather.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		58B789421DDC0D1F007765BB /* DMLDailyForecastAPIManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DMLDailyForecastAPIManager.h; sourceTree = "<group>"; };
 		58B789431DDC0D1F007765BB /* DMLDailyForecastAPIManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DMLDailyForecastAPIManager.m; sourceTree = "<group>"; };
@@ -170,8 +167,6 @@
 				589D21641DC1EF1E00CA0905 /* DMLDailyWeatherCell.m */,
 				589D21661DC1FB8900CA0905 /* DMLDetailWeatherCell.h */,
 				589D21671DC1FB8900CA0905 /* DMLDetailWeatherCell.m */,
-				589D216C1DC741FD00CA0905 /* DMLHairLineDecorateView.h */,
-				589D216D1DC741FD00CA0905 /* DMLHairLineDecorateView.m */,
 				58147DC420E381D000B5E4EE /* DMLHeader.h */,
 				58147DC520E381D000B5E4EE /* DMLHeader.m */,
 				58147DC720E3821900B5E4EE /* DMLMenu.h */,
@@ -504,7 +499,6 @@
 				588032C81DD05B79003AFF96 /* DMLCurrentWeatherAPIManager.m in Sources */,
 				589D216B1DC73D1800CA0905 /* UIImage+DMLAdditions.m in Sources */,
 				58147DC020E3700000B5E4EE /* DMLCollectionViewHandOffLayoutAttributes.m in Sources */,
-				589D216E1DC741FD00CA0905 /* DMLHairLineDecorateView.m in Sources */,
 				58147DC320E3709200B5E4EE /* DMLCollectionViewHandOffLayout.m in Sources */,
 				5835E8D41DBF01F400A68F63 /* UIColor+DMLAdditions.m in Sources */,
 				589D21681DC1FB8900CA0905 /* DMLDetailWeatherCell.m in Sources */,
